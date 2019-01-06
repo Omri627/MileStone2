@@ -13,7 +13,7 @@ class StringReverser : public Solver<string, string>  {
 public:
     StringReverser(string problem, string solution);
 
-public:
+    virtual string solve(string problem);
 
 };
 
