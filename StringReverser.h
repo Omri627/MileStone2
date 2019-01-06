@@ -15,6 +15,8 @@ public:
 
     virtual string solve(string problem);
 
+private:
+    string reverseString(string s);
 };
 
 
