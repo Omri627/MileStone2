@@ -5,13 +5,14 @@
 #include "ClientHandler.h"
 #include "CacheManager.h"
 #include "Solver.h"
+#include "StringReverserSolver.h"
 
 class MyTestClientHandler : public ClientHandler {
 private:
-    Solver<string, string>* solver;
+    StringReverserSolver* solver;
     CacheManager<string, string>* cache;
 public:
-    MyTestClientHandler(Solver<string, string>* solver);
+    MyTestClientHandler(istream input, ofstream output);
 
 };
 #endif

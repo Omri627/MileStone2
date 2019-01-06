@@ -4,7 +4,8 @@
 #include "ClientHandler.h"
 
 class Server {
-    virtual void open(int port ,ClientHandler clientHandler) = 0;
+    virtual void open(int port, ClientHandler clientHandler) = 0;
+
     virtual void stop() = 0;
 };
 
