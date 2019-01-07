@@ -3,4 +3,4 @@ project(project2)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(project2 main.cpp Server.cpp Server.h ClientHandler.cpp ClientHandler.h MyTestClientHandler.cpp MyTestClientHandler.h Solver.cpp Solver.h CacheManager.cpp CacheManager.h FileCacheManager.cpp FileCacheManager.h StringReverserSolver.cpp StringReverserSolver.h SerialServer.cpp SerialServer.h)
+add_executable(project2 main.cpp Server.cpp Server.h ClientHandler.cpp ClientHandler.h MyTestClientHandler.cpp MyTestClientHandler.h Solver.cpp Solver.h CacheManager.cpp CacheManager.h FileCacheManager.cpp FileCacheManager.h StringReverserSolver.cpp StringReverserSolver.h SerialServer.cpp SerialServer.h Searchable.cpp Searchable.h Searcher.cpp Searcher.h State.cpp State.h)
