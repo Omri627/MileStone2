@@ -6,13 +6,17 @@
 #include "CacheManager.h"
 #include "Solver.h"
 #include "StringReverserSolver.h"
+#include "Server.h"
 
 class MyTestClientHandler : public ClientHandler {
 private:
     StringReverserSolver* solver;
     CacheManager<string, string>* cache;
 public:
-    MyTestClientHandler(istream input, ofstream output);
+    MyTestClientHandler(StringReverserSolver* solver, CacheManager<string, string> *cache);
+
+    virtual void handleClient(string problem, Server * server);
+
 
 
 };

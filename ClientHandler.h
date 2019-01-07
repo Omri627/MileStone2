@@ -2,9 +2,11 @@
     #define CLIENT_HANDLER
 
 #include <iostream>
+class Server;
 using namespace std;
 class ClientHandler {
-    virtual void handleClient(istream input, ostream output) = 0;
+public:
+    virtual void handleClient(string problem, Server * server) = 0;
 };
 
 

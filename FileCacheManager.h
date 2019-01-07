@@ -4,15 +4,18 @@
 #include <string>
 #include "CacheManager.h"
 using namespace std;
-class FileCacheManager : public CacheManager {
+template <class Problem, class Solution>
+class FileCacheManager : public CacheManager<Problem, Solution> {
+private:
     string fileUrl;
+public:
+    FileCacheManager(string fileUrl);
 
-    bool isSolutionExist(P problem) override;
+    void loadMap();
 
-    S *getSolution(P problem) override;
+    void saveData();
 
-    void storeSolution(P p, S s) override;
 };
 
 
-#endif //PROJECT2_FILECACHEMANAGER_H
+#endif
