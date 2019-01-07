@@ -1,5 +1,5 @@
-#ifndef PROJECT2_SERVER_H
-    #define PROJECT2_SERVER_H
+#ifndef SERVER
+    #define SERVER
 
 #include "ClientHandler.h"
 #include <stdio.h>

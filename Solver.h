@@ -11,6 +11,4 @@ public:
 
     virtual Solution solve(Problem problem) = 0;
 };
-
-
-#endif //PROJECT2_SOLVER_H
+#endif
