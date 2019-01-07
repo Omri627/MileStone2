@@ -16,7 +16,7 @@ void FileCacheManager<Problem, Solution>::loadMap() {
         cerr << "Unable to open file";
         exit(1);   // call system to stop
     }
-    file.ignore(',');
+    file.ignore('$');
     while (file >> problem >> solution) {
         this->storeSolution(problem, solution);
     }
@@ -28,7 +28,7 @@ void FileCacheManager<Problem, Solution>::saveData() {
     typename map < Problem, Solution >::iterator iterator;
     iterator = this->getMapIterator();
     while (iterator != this->getEndIterator()) {
-        file << iterator->first << "," << iterator->second << endl;
+        file << iterator->first << "$" << iterator->second << endl;
         iterator++;
     }
 }

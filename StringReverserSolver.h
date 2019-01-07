@@ -1,7 +1,6 @@
 #ifndef PROJECT2_STRINGREVERSER_H
 #define PROJECT2_STRINGREVERSER_H
 
-
 #include <string>
 #include "Solver.h"
 using namespace std;
