@@ -1,6 +1,8 @@
 #include <string.h>
 #include <fstream>
+#include <bits/signum.h>
 #include "SerialServer.h"
+#include <signal.h>
 SerialServer::SerialServer(string address) {
     this->address = address;
 }
@@ -10,7 +12,6 @@ SerialServer::SerialServer() {
 }
 
 int SerialServer::createServer(int port) {
-    int socketFd;                            // socket file descriptor
     struct sockaddr_in server_address;       // socket structure
 
     // AF-INET = address family ipv4
@@ -18,7 +19,7 @@ int SerialServer::createServer(int port) {
     // protocol = 0  default protocol for the given combination of family and type
     // socket method opens socket by insert socket resource into resources table of operating system
     // and returns integer which uniquely identifies a resouce in operating system.
-    socketFd = socket(AF_INET, SOCK_STREAM, 0);
+    this->socketFd = socket(AF_INET, SOCK_STREAM, 0);
 
     // send message in case there is an error in opening socket
     if (socketFd < 0) {
@@ -39,42 +40,58 @@ int SerialServer::createServer(int port) {
     }
 
     cout << "server opened listen for client request" << endl;
-    return socketFd;
 }
 
-int SerialServer::listenToClient(int socketFd) {
+int SerialServer::listenToClient() {
     struct sockaddr_in client_address;
     int clientSizeStructure;
-
     // start listening for the clients,
     // the process be in sleep mode and will wait for the incoming connection
     listen(socketFd, 5);
+    if (this->socketFd == -1) {
+        cout << "connection lost" << endl;
+        return 0;
+    }
     //* Accept actual connection from the client *//*
     clientSizeStructure = sizeof(client_address);
-    this->socketFd = accept(socketFd, (struct sockaddr *) &client_address, (socklen_t *) &clientSizeStructure);
-    if (socketFd < 0) {
-        perror("ERROR on accept");
-        exit(1);
+    this->clientFd = accept(socketFd, (struct sockaddr *) &client_address, (socklen_t *) &clientSizeStructure);
+    if (this->clientFd < 0) {
+        return 0;
+        //perror("ERROR on accept");
+        //exit(1);
     }
     cout << "request accepted"  << endl;
 }
 
 void SerialServer::open(int port, ClientHandler* clientHandler) {
-    int socketFd;
-    int listen;
-    string problem;
-    socketFd = this->createServer(port);
+    string problem;                               // problem that has been received from client
+    pthread_t createThread, listenThread;         // thread for create server with port
+    create_params createParams;                   // parameters for create method
+    struct timespec abstime;                      // timer object
+    createParams.server = this;
+    createParams.port = port;
+    /* create thread to create server with given port */
+    pthread_create(&createThread, nullptr, &SerialServer::createServerHelper, &createParams);
+    pthread_join(createThread, nullptr);
+    /* connect and handle each client */
     while (true) {
-        listen = this->listenToClient(socketFd);
-        if (!listen)
-            return;
+        /* set timer for listen thread */
+        clock_gettime(CLOCK_REALTIME, &abstime);
+        abstime.tv_sec += 10;
+        /* create thread to listen for possible clients requests */
+        pthread_create(&listenThread, nullptr, &SerialServer::listenToClientHelper, this);
+        pthread_timedjoin_np(listenThread, nullptr, &abstime);
+        if (this->clientFd <= 0) {
+            cout << "time elapsed" << endl;
+            break;
+        }
+        /* break if timout is over */
         problem = this->readData();
         clientHandler->handleClient(problem, this);
+        this->closeClientConnection();
     }
-}
-
-void SerialServer::stop() {
-    this->isRunning = false;
+    delete(clientHandler);
+    this->stop();
 }
 string SerialServer::readData() {
     pthread_mutex_lock(&global_mutex);
@@ -82,23 +99,50 @@ string SerialServer::readData() {
     int bytesReaded;
     char buffer[bufferSize];
     bzero(buffer,bufferSize);                      // set buffer with null values
-    bytesReaded = read(this->socketFd, buffer, bufferSize-1);
+    cout << "flush" << endl;
+    bytesReaded = read(this->clientFd, buffer, bufferSize-1);
     if (bytesReaded < 0) {
         perror("ERROR reading from socket");
         exit(1);
     }
     pthread_mutex_unlock(&global_mutex);
+    buffer[bytesReaded-2] = 0;
     return buffer;
 }
 void SerialServer::sendData(string data) {
     int byteTransmitted;
-    const char * msgToTransmit = data.c_str();
+    /* convert string data into array of characters to transmit */
+    const char * charactersData = data.c_str();
+    char * msgToTransmit = (char*)malloc(sizeof(charactersData) + 2);
+    strcpy(msgToTransmit, charactersData);
+    msgToTransmit[strlen(msgToTransmit)] = '\r\n';
+    //strcat(msgToTransmit, "\r\n");
+    cout << data << endl;
     /* Send message to the server */
     pthread_mutex_lock(&global_mutex);
-    byteTransmitted = write(this->socketFd, msgToTransmit, strlen(msgToTransmit));
+    byteTransmitted = write(this->clientFd, msgToTransmit, strlen(msgToTransmit));
     pthread_mutex_unlock(&global_mutex);
     if (byteTransmitted < 0) {
         perror("ERROR writing to socket");
         exit(1);
     }
+}
+void* SerialServer::createServerHelper(void * params) {
+    create_params* parameters = (create_params*)params;
+    parameters->server->createServer(parameters->port);
+    return nullptr;
+}
+
+void* SerialServer::listenToClientHelper(void *params) {
+    ((SerialServer *) params)->listenToClient();
+}
+void SerialServer::stop() {
+    this->isRunning = false;
+    /* reset file descriptors */
+    this->socketFd = -1;
+    this->clientFd = -1;
+}
+void SerialServer::closeClientConnection() {
+    close(this->clientFd);
+    this->clientFd = -1;
 }

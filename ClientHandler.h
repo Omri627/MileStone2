@@ -7,7 +7,9 @@ using namespace std;
 class ClientHandler {
 public:
     virtual void handleClient(string problem, Server * server) = 0;
+
+    virtual ~ClientHandler();
 };
 
 
-#endif //PROJECT2_CLIENTHANDLER_H
+#endif

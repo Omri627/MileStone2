@@ -4,11 +4,7 @@
 #include "CacheManager.h"
 template <class Problem, class Solution>
 class Solver {
-    Problem problem;
-    Solution solution;
 public:
-    Solver(Problem problem, Solution solution) : problem(problem), solution(solution) {}
-
     virtual Solution solve(Problem problem) = 0;
 };
 #endif

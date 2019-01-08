@@ -4,10 +4,10 @@
 
 #include "Searchable.h"
 
-template <class Solution, class State>
+template <class Solution, class T>
 class Searcher {
 public:
-    virtual Solution search(Searchable<State> searchable) = 0;
+    virtual Solution search(Searchable<State<T>> searchable) = 0;
 };
 
 

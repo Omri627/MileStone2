@@ -6,13 +6,12 @@
 using namespace std;
 class StringReverserSolver : public Solver<string, string>  {
 public:
-    StringReverserSolver(string problem, string solution);
-
     virtual string solve(string problem);
 
 private:
     string reverseString(string s);
+
+public:
+    virtual ~StringReverserSolver();
 };
-
-
 #endif

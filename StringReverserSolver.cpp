@@ -1,9 +1,4 @@
 #include "StringReverserSolver.h"
-StringReverserSolver::StringReverserSolver(string problem, string solution)
-: Solver(problem, solution) {
-
-}
-
 string StringReverserSolver::solve(string problem) {
     return this->reverseString(problem);
 }
@@ -17,4 +12,8 @@ string StringReverserSolver::reverseString(string str) {
         }
 
         return str;
+}
+
+StringReverserSolver::~StringReverserSolver() {
+
 }

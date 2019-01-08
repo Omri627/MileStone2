@@ -1,8 +1,12 @@
 #include <iostream>
-
+#include "Server.h"
+#include "SerialServer.h"
+#include "MyTestClientHandler.h"
+#include "Solver.h"
 int main() {
-    int n;
-    std::cout << "Hello, World!" << std::endl;
-    std::cin >> n;
-    return 0;
+    SerialServer *server = new SerialServer("127.0.0.1");
+    StringReverserSolver *solver = new StringReverserSolver();
+    MyTestClientHandler *handler = new MyTestClientHandler(solver);
+    server->open(5400, handler);
+    delete server;
 }

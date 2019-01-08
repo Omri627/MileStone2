@@ -7,19 +7,12 @@
 using namespace std;
 template <class Problem, class Solution>
 class CacheManager {
-private:
-    map<Problem, Solution> solutions;
-protected:
-    typename map<Problem, Solution>::iterator getStartIterator();
-
-    typename map<Problem, Solution>::iterator getEndIterator();
-
 public:
-    virtual bool isSolutionExist(Problem problem);
+    virtual bool isSolutionExist(Problem problem) = 0;
 
-    virtual Solution getSolution(Problem problem);
+    virtual Solution getSolution(Problem problem) = 0;
 
-    virtual void storeSolution(Problem p, Solution s);
+    virtual void storeSolution(Problem p, Solution s) = 0;
 };
 
 #endif
