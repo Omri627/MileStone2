@@ -68,6 +68,22 @@ public:
     void setColor(enum color color) {
         this->color = color;
     }
+
+    bool operator<(const State &rhs) const {
+        return cost < rhs.cost;
+    }
+
+    bool operator>(const State &rhs) const {
+        return rhs < *this;
+    }
+
+    bool operator<=(const State &rhs) const {
+        return !(rhs < *this);
+    }
+
+    bool operator>=(const State &rhs) const {
+        return !(*this < rhs);
+    }
 };
 
 
