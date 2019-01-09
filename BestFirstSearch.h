@@ -11,7 +11,6 @@ class BestFirstSearch :public Searcher<T>{
 private:
     MyPriorityQueue<State<T>> priorityQueue;
 
-    bool isStateExsist(State<T> state);
 public:
     Solution* search(Searchable<State<T>> searchable);
 };

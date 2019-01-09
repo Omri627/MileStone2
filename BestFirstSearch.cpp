@@ -39,11 +39,3 @@ Solution* BestFirstSearch<T>::search(Searchable<State<T>> searchable) {
         }
     }
 }
-template <class T>
-bool BestFirstSearch<T>::isStateExsist(State<T> state) {
-    typename priority_queue<State<T>>::iterator iterator;
-    iterator =
-    if (iterator == this->states.end())
-        return false;
-    return true;
-}
