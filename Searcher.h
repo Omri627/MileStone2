@@ -4,8 +4,9 @@
 
 #include "Searchable.h"
 #include "vector"
+#include "Solution.h"
 using namespace std;
-template <class Solution, class T>
+template <class T>
 class Searcher {
 public:
     virtual Solution search(Searchable<State<T>> searchable) = 0;
