@@ -53,7 +53,7 @@ public:
     }
 
 
-    const State<T> &getCameFrom() const {
+    const State<T> &getCameFrom() {
         return cameFrom;
     }
 
