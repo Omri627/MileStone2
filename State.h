@@ -70,10 +70,10 @@ public:
     }
 
     bool operator<(const State &rhs) const {
-        return cost > rhs.cost; //it actual grater so it will in reverse order in priority queue
+        return cost < rhs.cost;
     }
 
-   /* bool operator>(const State &rhs) const {
+    bool operator>(const State &rhs) const {
         return rhs < *this;
     }
 
@@ -83,7 +83,7 @@ public:
 
     bool operator>=(const State &rhs) const {
         return !(*this < rhs);
-    }*/
+    }
 };
 
 

@@ -9,7 +9,8 @@
 
 using namespace std;
 template <typename  T>
-class MyPriorityQueue : public priority_queue<T, std::vector<T>> {
+class MyPriorityQueue : public priority_queue<T, std::vector<T>, std::greater<T>> {
+    //priority queue that use greater instead of less operator
 public:
 
     bool remove(const T& value);
