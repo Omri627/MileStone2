@@ -14,7 +14,6 @@ void Dfs<Solution, T>::initializeSinglePair(Searchable<State<T>> searchable) {
 template<class Solution, class T>
 Solution Dfs<Solution, T>::search(Searchable<State<T>> searchable) {
     dfsVisit(searchable.getInitialState(), searchable);
-
 }
 
 template<class Solution, class T>
