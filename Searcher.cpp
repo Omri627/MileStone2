@@ -1,7 +1,7 @@
 
 #include "Searcher.h"
-template <class Solution, class T>
-double Searcher<Solution, T>::getCostOfPath(State<T> start, State<T> end) {
+template <class T>
+double Searcher<T>::getCostOfPath(State<T> start, State<T> end) {
     double sum = 0;
     State<T> temp = end;
     while (temp != start) {
@@ -15,8 +15,8 @@ double Searcher<Solution, T>::getCostOfPath(State<T> start, State<T> end) {
     return sum;
 }
 
-template <class Solution, class T>
-double Searcher<Solution, T>::getLengthOfPath(State<T> start, State<T> end) {
+template <class T>
+double Searcher<T>::getLengthOfPath(State<T> start, State<T> end) {
     double counter = 0;
     State<T> temp = end;
     while (temp != start) {
