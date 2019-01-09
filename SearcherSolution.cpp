@@ -19,3 +19,11 @@ int SearcherSolution::getLength() const {
 string SearcherSolution::StringRepresentation() {
     return this->totalCost + "$" + this->length;
 }
+
+void SearcherSolution::setTotalCost(int totalCost) {
+    SearcherSolution::totalCost = totalCost;
+}
+
+void SearcherSolution::setLength(int length) {
+    SearcherSolution::length = length;
+}

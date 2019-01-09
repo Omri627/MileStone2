@@ -13,6 +13,10 @@ public:
 
     int getLength() const;
 
+    void setTotalCost(int totalCost);
+
+    void setLength(int length);
+
     virtual string StringRepresentation();
 };
 

@@ -1,7 +1,8 @@
 
 #include "Dfs.h"
-template <class Solution, class T>
-void Dfs<Solution, T>::initializeSinglePair(Searchable<State<T>> searchable) {
+#include "SearcherSolution.h"
+template <class T>
+void Dfs<T>::initializeSinglePair(Searchable<State<T>> searchable) {
     typename map<position,  State<T>>::iterator iterator;
     iterator = searchable.getStates().begin();
     while (iterator != searchable.getStates().end()) {
@@ -11,13 +12,17 @@ void Dfs<Solution, T>::initializeSinglePair(Searchable<State<T>> searchable) {
     searchable.getInitialState().setCost(0);
 }
 
-template<class Solution, class T>
-Solution Dfs<Solution, T>::search(Searchable<State<T>> searchable) {
+template<class T>
+Solution* Dfs<T>::search(Searchable<State<T>> searchable) {
+    int cost, sum;
     dfsVisit(searchable.getInitialState(), searchable);
+    cost = this->getCostOfPath(searchable.getInitialState(), searchable.getGoalState());
+    sum = this->getLengthOfPath(searchable.getInitialState(), searchable.getGoalState());
+    return new SearcherSolution(cost, sum);
 }
 
-template<class Solution, class T>
-void Dfs<Solution, T>::dfsVisit(State<T> state, Searchable<State<T>> searchable) {
+template<class T>
+void Dfs<T>::dfsVisit(State<T> state, Searchable<State<T>> searchable) {
     static int t = 0;
     state.setColor(GRAY);
     list < State<T>> neighbors = searchable.getStates();
