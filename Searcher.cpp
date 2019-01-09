@@ -7,6 +7,10 @@ double Searcher<Solution, T>::getCostOfPath(State<T> start, State<T> end) {
     while (temp != start) {
         sum += temp.getCost();
         temp = temp.getCameFrom();
+        if (temp == nullptr) {
+            //there is no path
+            return -1;
+        }
     }
     return sum;
 }
@@ -18,6 +22,11 @@ double Searcher<Solution, T>::getLengthOfPath(State<T> start, State<T> end) {
     while (temp != start) {
         counter += 1;
         temp = temp.getCameFrom();
+        if (temp == nullptr) {
+            //there is no path
+            return -1;
+        }
+
     }
     return counter;
 }
