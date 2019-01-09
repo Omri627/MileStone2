@@ -3,7 +3,8 @@
 
 template <class T>
 Solution* BestFirstSearch<T>::search(Searchable<State<T>> searchable) {
-    double newPath, oldPath = 0;
+    double newPath = 0;
+    double oldPath = -1;
     priorityQueue.emplace(searchable.getInitialState());
     searchable.getInitialState().setColor(GRAY); //is state inside the pq is color is gray
 
@@ -27,7 +28,7 @@ Solution* BestFirstSearch<T>::search(Searchable<State<T>> searchable) {
                 priorityQueue.emplace(s);
             } else {
                 newPath = getCostOfPath(searchable.getInitialState(), s);
-                if (newPath > oldPath) {
+                if (newPath < oldPath || oldPath == -1) { //old path will be -1 only at the beginning
                     if (s.getColor() != GRAY) {
                         //if s is not in pq add to pq
                         priorityQueue.emplace(s);
