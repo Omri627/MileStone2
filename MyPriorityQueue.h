@@ -1,7 +1,3 @@
-//
-// Created by omri on 09/01/19.
-//
-
 #ifndef PROJECT2_MYPRIORITYQUEUE_H
 #define PROJECT2_MYPRIORITYQUEUE_H
 
