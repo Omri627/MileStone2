@@ -1,7 +1,3 @@
-//
-// Created by omri on 08/01/19.
-//
-
 #include "BestFirstSearch.h"
 
 template <class Solution, class T>
