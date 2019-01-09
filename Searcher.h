@@ -9,7 +9,7 @@ using namespace std;
 template <class T>
 class Searcher {
 public:
-    virtual Solution search(Searchable<State<T>> searchable) = 0;
+    virtual Solution* search(Searchable<State<T>> searchable) = 0;
 
     virtual double getCostOfPath(State<T> start, State<T> end);
 

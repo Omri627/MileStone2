@@ -3,15 +3,17 @@
 #define PROJECT2_BESTFIRSTSEARCH_H
 
 #include "Searcher.h"
-#include "queue"
+#include "MyPriorityQueue.h"
 using namespace std;
 
-template <class Solution, class T>
-class BestFirstSearch :public Searcher<Solution, T>{
+template <class T>
+class BestFirstSearch :public Searcher<T>{
 private:
-    priority_queue<State<T>> priorityQueue;
+    MyPriorityQueue<State<T>> priorityQueue;
+
+    bool isStateExsist(State<T> state);
 public:
-    Solution search(Searchable<State<T>> searchable);
+    Solution* search(Searchable<State<T>> searchable);
 };
 
 

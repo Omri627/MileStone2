@@ -1,46 +1,49 @@
 #include "BestFirstSearch.h"
+#include "SearcherSolution.h"
 
-template <class Solution, class T>
-Solution BestFirstSearch<Solution, T>::search(Searchable<State<T>> searchable) {
+template <class T>
+Solution* BestFirstSearch<T>::search(Searchable<State<T>> searchable) {
+    double newPath, oldPath = 0;
     priorityQueue.emplace(searchable.getInitialState());
-    list<State<T>> closed;
+    searchable.getInitialState().setColor(GRAY); //is state inside the pq is color is gray
+    //list<State<T>> closed;
     while (!priorityQueue.empty()) {
         State<T> n = priorityQueue.pop();
         if (n == searchable.getGoalState()) {
-            // n is the goal return the path
-            return n;// return u, or return some kind of list of back tracing
+            double sum = getCostOfPath(searchable.getInitialState(), n);
+            double length = getLengthOfPath(searchable.getInitialState(), n);
+            if (sum != -1 && length != -1) {
+                return new SearcherSolution(sum, length);
+            }
+            return new SearcherSolution(-1, -1);
     }
         list<State<T>> neighbors = searchable.getAllPossibleState(n); //all n neighbors
-        for (State<T>* s : neighbors) {
-            if (!isExsist(closed,s) && isExsist(priorityQueue,s)) {
-                //todo:: implement the methods, "if s is not in closed and s is not in open"
+        for (State<T> s : neighbors) {
+            if ((s.getColor() != BLACK) && (s.getColor() != GRAY)) {
                 s->setCameFrom(n);
+                s.setColor(GRAY);
                 priorityQueue.emplace(s);
             } else {
-                if (!isExsist(priorityQueue,s)) {
-                    //"if s is not in open add to open"
-                    priorityQueue.emplace(s);
+                newPath = getCostOfPath(searchable.getInitialState(), s);
+                if (newPath > oldPath) {
+                    if (s.getColor() != GRAY) {
+                        //if s is not in pq add to pq
+                        priorityQueue.emplace(s);
+                        oldPath = newPath;
+                    } else {
+                        priorityQueue.remove(s);
+                        priorityQueue.emplace(s);
+                    }
                 }
             }
         }
     }
-    /*priorityQueue.emplace(searchable.getInitialState()); //insert start to the priority queue
-    while (!priorityQueue.empty()) {
-        State<T> u = priorityQueue.pop();
-        if (u == searchable.getGoalState()) {
-            // u is the goal return the path
-            return u; // return u, or return some kind of list of back tracing
-        } else {
-            list<State<T>*> neighbors = searchable.getNeighbors(u);
-            for (State<T>* v : neighbors) {
-                //for each neighbor v of u
-                if (v->getColor() == WHITE) {
-                    //v is unvisited
-                    v->setColor(GRAY);
-                    v->setCameFrom(u);// i think is need to be here
-                    priorityQueue.emplace(v);
-                }
-            }
-        }
-    }*/
+}
+template <class T>
+bool BestFirstSearch<T>::isStateExsist(State<T> state) {
+    typename priority_queue<State<T>>::iterator iterator;
+    iterator =
+    if (iterator == this->states.end())
+        return false;
+    return true;
 }
