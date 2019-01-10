@@ -11,7 +11,7 @@ template <class T>
 class MazeGame : public Searchable<T> {
 private:
     typedef vector<vector<State<T>*>> matrix;
-    int matrixSize
+    int matrixSize;
     matrix statesMatrix;
     State<T>* initialState;
     State<T>* goalState;
