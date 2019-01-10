@@ -19,16 +19,19 @@ public:
     State(T state) : state(state) {
         this->cameFrom = nullptr;
         this->color = WHITE;
+        this->cost =-1;
     }
 
     State(T state, double cost) : state(state), cost(cost) {
         this->cameFrom = nullptr;
         this->color = WHITE;
+        this->cost = -1;
     }
 
     State(T state, int row, int column) : state(state), row(row), column(column) {
         this->cameFrom = nullptr;
         this->color = WHITE;
+        this->cost = -1;
     }
 
     State() {}

@@ -23,9 +23,8 @@ int main() {
     data.push_back(row4);
     data.push_back(row5);
     MazeGame<int>* mazeGame = new MazeGame<int>(data);
-    BestFirstSearch<int>* bfs = new BestFirstSearch<int>();
+    Dfs<int>* bfs = new Dfs<int>();
     Solution* s = bfs->search(mazeGame);
-
     delete server;
     delete mazeGame;
     delete s;
