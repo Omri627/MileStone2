@@ -7,7 +7,7 @@
 
 using namespace std;
 template <typename  T>
-class MyPriorityQueue : public priority_queue<T, std::vector<T>, CmpStatesPtrs<T>> {
+class MyPriorityQueue : public priority_queue<State<T>*, std::vector<State<T>*>, CmpStatesPtrs<T>> {
     //priority queue that use greater instead of less operator
     //todo:: if the priority queue is not reverse so I need to change the less operator to >
 public:
@@ -26,4 +26,4 @@ public:
 };
 
 
-#endif //PROJECT2_MYPRIORITYQUEUE_H
+#endif
