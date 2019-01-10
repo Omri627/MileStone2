@@ -1,5 +1,5 @@
 #ifndef PROJECT2_SERIALSERVER_H
-#define PROJECT2_SERIALSERVER_H
+    #define PROJECT2_SERIALSERVER_H
 
 #include <iostream>
 #include "Server.h"
@@ -46,4 +46,4 @@ public:
 };
 
 
-#endif //PROJECT2_SERIALSERVER_H
+#endif
