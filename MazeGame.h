@@ -10,25 +10,26 @@
 template <class T>
 class MazeGame : public Searchable<T> {
 private:
-    typedef vector<vector<State<T>*>> matrix;
+    typedef vector<vector<State<T> *>> matrix;
     int matrixSize;
     matrix statesMatrix;
-    State<T>* initialState;
-    State<T>* goalState;
+    State<T> *initialState;
+    State<T> *goalState;
 
     MazeGame<T> *createMazeFromData(vector<string> data) {
         position initialPosition;
         position goalPosition;
-        const char* buffer;
+        const char *buffer;
         T weight;
-        State<T>* state;
+        State<T> *state;
         char delimiter;
-        for (int i = 2, j = 0; i < data.size() - 2; i++) {
-            istringstream rowStream(data[i]);
+        for (int i = 2, j = 0; i < data.size(); i++) {
+            string row = data.at(i);
+            istringstream rowStream(row);
             j = 0;
             while (rowStream >> weight) {
-                state = new State<T>(weight, i, j);
-                this->matrixStates[i-2][j] = state;
+                state = new State<T>(weight, i-2, j);
+                this->setState(i-2, j, state);
                 rowStream >> delimiter;
                 j++;
             }
@@ -43,53 +44,63 @@ private:
 
 
 public:
-    MazeGame(matrix states, State<T>* initialState, State<T>* goalState, int matrixSize){
+    MazeGame(matrix states, State<T> *initialState, State<T> *goalState, int matrixSize) {
         this->statesMatrix = states;
         this->initialState = initialState;
         this->goalState = goalState;
         this->matrixSize = matrixSize;
     }
 
-    MazeGame(matrix states, struct position initial, struct position goal, int matrixSize){
+    MazeGame(matrix states, struct position initial, struct position goal, int matrixSize) {
         this->states = states;
         this->initialState = getState(initial);
         this->goalState = getState(goal);
         this->matrixSize = matrixSize;
     }
+
     MazeGame(vector<string> data) {
+        this->matrixSize = data.size() - 2;
+        this->initMatrix();
         this->createMazeFromData(data);
     }
 
-    virtual State<T>* getState(position position) {
-        return this->states[position.row][position.column];
+    virtual State<T> *getState(position position) {
+        return this->statesMatrix[position.row][position.column];
     }
 
     virtual bool isStateExist(position position) {
         if (position.row > this->matrixSize || position.row < 0
-                || position.column > this->matrixSize || position.column < 0)
+            || position.column > this->matrixSize || position.column < 0)
             return false;
         return true;
     }
 
-    virtual State<T>* getState(int row, int column){
-        this->statesMatrix[row][column];
+    virtual bool isStateExist(int row, int column) {
+        if (row > this->matrixSize || row < 0
+            || column > this->matrixSize || column < 0)
+            return false;
+        return true;
     }
 
-    virtual list <State<T>*> getAllPossibleState(State<T> state, int size) {
-        list < State<T> > neighbors;
-        if (this->isStateExist(state.getRow() - 1, state.getColumn()))
-            neighbors.insert(this->getState(state.getRow() - 1, state.getColumn()));
-        if (this->isStateExist(state.getRow(), state.getColumn() - 1))
-            neighbors.insert(this->getState(state.getRow(), state.getColumn() - 1));
-        if (this->isStateExist(state.getRow() + 1, state.getColumn()))
-            neighbors.insert(this->getState(state.getRow() + 1, state.getColumn()));
-        if (this->isStateExist(state.getRow(), state.getColumn() + 1))
-            neighbors.insert(this->getState(state.getRow(), state.getColumn() + 1));
+    virtual State<T> *getState(int row, int column) {
+        return this->statesMatrix[row][column];
+    }
+
+    virtual list<State<T> *> getAllPossibleState(State<T> *state) {
+        list < State<T> * > neighbors;
+        if (this->isStateExist(state->getRow() - 1, state->getColumn()))
+            neighbors.push_back(this->getState(state->getRow() - 1, state->getColumn()));
+        if (this->isStateExist(state->getRow(), state->getColumn() - 1))
+            neighbors.push_back(this->getState(state->getRow(), state->getColumn() - 1));
+        if (this->isStateExist(state->getRow() + 1, state->getColumn()))
+            neighbors.push_back(this->getState(state->getRow() + 1, state->getColumn()));
+        if (this->isStateExist(state->getRow(), state->getColumn() + 1))
+            neighbors.push_back(this->getState(state->getRow(), state->getColumn() + 1));
         return neighbors;
     }
 
-    virtual matrix getStates(){
-        return this->states;
+    virtual matrix getStates() {
+        return this->statesMatrix;
     }
 
     State<T> *getInitialState() const {
@@ -107,6 +118,24 @@ public:
     void setGoalState(State<T> *goalState) {
         this->goalState = goalState;
     }
+
+    void setState(int row, int column, State<T> *state) {
+/*        vector<State<T> *> rowVector;
+        rowVector = this->statesMatrix.at(row);
+        rowVector.at(column) = state;*/
+        this->statesMatrix[row][column] = state;
+    }
+
+    void initMatrix() {
+        for (int i = 0; i < this->matrixSize; i++) {
+            vector<State<T> *> rowVector;
+            for (int j = 0; j < this->matrixSize; j++) {
+                rowVector.push_back(nullptr);
+            }
+            this->statesMatrix.push_back(rowVector);
+        }
+    }
+
 };
 
 

@@ -14,12 +14,11 @@ using namespace std;
 template <class T>
 class Searchable {
 public:
-    virtual State<T> getInitialState() = 0;
+    virtual State<T>* getInitialState() const = 0;
 
-    virtual State<T> getGoalState() = 0;
+    virtual State<T>* getGoalState() const = 0;
 
-    virtual list<State<T>> getAllPossibleState(State<T> s) = 0;
-    //todo: I think it is need to be with *
+    virtual list<State<T>*> getAllPossibleState(State<T>* s) = 0;
 
     //virtual list<State<T>*> getNeighbors(State<T> state);
 };
