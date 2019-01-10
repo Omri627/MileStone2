@@ -5,6 +5,8 @@
 #include "Searcher.h"
 #include "MyPriorityQueue.h"
 #include "SearcherSolution.h"
+#include "vector"
+#include "CmpStatePtrs.h"
 
 using namespace std;
 
@@ -16,7 +18,7 @@ private:
 public:
     virtual Solution *search(Searchable<T> *searchable) {
         double newPath = 0;
-        double oldPath = -1;
+        double oldPath = -5;
         priorityQueue.emplace(searchable->getInitialState());
         searchable->getInitialState()->setColor(BLACK); //initial state should be black
 
@@ -35,21 +37,25 @@ public:
 
             list<State<T>*> neighbors = searchable->getAllPossibleState(n); //all n neighbors
             for (State<T>* s : neighbors) {
-                if ((s->getColor() != BLACK) && (s->getColor() != GRAY)) {
-                    s->setCameFrom(n);
-                    s->setColor(GRAY); //color is gray because we add it to queue
-                    priorityQueue.emplace(s);
-                } else {
-                    newPath = this->getCostOfPath(searchable->getInitialState(), s);
-                    s->setCost(newPath);// update the sum of the path from the start to s.
-                    if (newPath < oldPath || oldPath == -1) { //old path will be -1 only at the beginning
-                        if (s->getColor() != GRAY) {
-                            //if s is not in pq add to pq
-                            priorityQueue.emplace(s);
-                            oldPath = newPath;
-                        } else {
-                            priorityQueue.remove(s);
-                            priorityQueue.emplace(s);
+                if (s->getColor() != BLACK) {
+                    if ((s->getColor() != BLACK) && (s->getColor() != GRAY)) {
+                        s->setCameFrom(n);
+                        s->setColor(GRAY); //color is gray because we add it to queue
+                        // update the sum of the path from the start to s
+                        s->setCost(this->getCostOfPath(searchable->getInitialState(), s));
+                        priorityQueue.remove(s);
+                        priorityQueue.emplace(s);
+                    } else {
+                        if (s->getCost() < oldPath || oldPath == -5) { //old path will be -1 only at the beginning
+                            if (s->getColor() != GRAY) {
+                                //if s is not in pq add to pq
+                                priorityQueue.remove(s);
+                                priorityQueue.emplace(s);
+                                oldPath = newPath;
+                            } else {
+                                priorityQueue.remove(s);
+                                priorityQueue.emplace(s);
+                            }
                         }
                     }
                 }
