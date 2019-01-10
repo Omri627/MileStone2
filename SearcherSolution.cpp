@@ -16,7 +16,7 @@ int SearcherSolution::getTotalCost() const {
 int SearcherSolution::getLength() const {
     return this->length;
 }
-string SearcherSolution::StringRepresentation() {
+string SearcherSolution::StringRepresentation() const {
     return this->totalCost + "$" + this->length;
 }
 

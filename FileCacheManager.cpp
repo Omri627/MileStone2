@@ -38,7 +38,7 @@ void FileCacheManager<Problem, Solution>::saveData() {
     typename map < Problem, Solution >::iterator iterator;
     iterator = this->getStartIterator();
     while (iterator != this->getEndIterator()) {
-        file << iterator->first << endl << "$" << endl << iterator->second << endl;
+        //file << iterator->first << endl << "$" << endl << iterator->second << endl;
         iterator++;
     }
     file.close();

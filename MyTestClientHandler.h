@@ -8,19 +8,23 @@
 #include "StringReverserSolver.h"
 #include "Server.h"
 #include "FileCacheManager.h"
+#include "SearcherSolver.h"
+#include "SearcherSolution.h"
+#include "MazeGame.h"
 
-
+template <class T>
 class MyTestClientHandler : public ClientHandler {
 private:
-    StringReverserSolver *solver;
-    FileCacheManager<string, string> *cache;
+    SearcherSolver<T>* solver;
+    FileCacheManager<MazeGame<T>*, Solution*> *cache;
 public:
-    MyTestClientHandler(StringReverserSolver *solver, FileCacheManager<string, string> *cache);
+    MyTestClientHandler(SearcherSolver<T> *solver, FileCacheManager<MazeGame<T>*, Solution*> *cache);
 
-    MyTestClientHandler(StringReverserSolver *solver);
+    MyTestClientHandler(SearcherSolver<T> *solver);
 
-    virtual void handleClient(string problem, Server *server);
+    virtual void handleClient(Server *server);
 
     virtual ~MyTestClientHandler();
+
 };
 #endif

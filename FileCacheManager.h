@@ -27,10 +27,9 @@ public:
 
     virtual Solution getSolution(Problem problem);
 
-    virtual void storeSolution(Problem p, Solution s);
+    virtual void storeSolution(Problem problem, Solution solution);
 
     virtual ~FileCacheManager();
 
 };
-template class FileCacheManager<string, string>;
 #endif

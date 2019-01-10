@@ -1,26 +1,39 @@
+#include <vector>
 #include "MyTestClientHandler.h"
 #include "FileCacheManager.h"
-
-MyTestClientHandler::MyTestClientHandler(StringReverserSolver* solver, FileCacheManager<string, string> *cache) {
+#include "stdio.h"
+template <class T>
+MyTestClientHandler<T>::MyTestClientHandler(SearcherSolver<T>* solver, FileCacheManager<MazeGame<T>*, Solution*> *cache) {
     this->solver = solver;
     this->cache = cache;
 }
-MyTestClientHandler::MyTestClientHandler(StringReverserSolver* solver) {
+template <class T>
+MyTestClientHandler<T>::MyTestClientHandler(SearcherSolver<T>* solver) {
     this->solver = solver;
-    this->cache = new FileCacheManager<string, string>("cache.txt");
+    this->cache = new FileCacheManager<MazeGame<T>*, Solution* >("cache.txt");
 }
-void MyTestClientHandler::handleClient(string problem, Server * server) {
-    string solution;
-    if (this->cache->isSolutionExist(problem)) {
-        cout << "cache" << endl;
-        solution = this->cache->getSolution(problem);
-    } else {
-        solution = this->solver->solve(problem);
-        this->cache->storeSolution(problem, solution);
+template <class T>
+void MyTestClientHandler<T>::handleClient(Server * server) {
+    MazeGame<T>* mazeGame;             // maze game
+    int linesInput;                    // number of lines
+    Solution* solution;        // solution of maze
+    vector < string > data;            // data about the maze game
+    linesInput = atoi(server->readData().c_str()) + 2;
+    for (int i = 0 ; i < linesInput; i++) {
+        data.push_back(server->readData());
     }
-    server->sendData(solution);
+    mazeGame = MazeGame<T>::createMazeFromData(data);
+    if (this->cache->isSolutionExist(mazeGame)) {
+        cout << "cache" << endl;
+        solution = this->cache->getSolution(mazeGame);
+    } else {
+        solution = this->solver->solve(mazeGame);
+        this->cache->storeSolution(mazeGame, solution);
+    }
+    server->sendData(solution->StringRepresentation());
 }
-MyTestClientHandler::~MyTestClientHandler() {
+template <class T>
+MyTestClientHandler<T>::~MyTestClientHandler() {
     delete this->solver;
     delete this->cache;
 }

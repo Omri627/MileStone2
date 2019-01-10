@@ -1,7 +1,9 @@
 
 #ifndef PROJECT2_STATE_H
-#define PROJECT2_STATE_H
+    #define PROJECT2_STATE_H
 
+#include <string>
+using namespace std;
 enum color {
     WHITE, GRAY, BLACK
 };
@@ -11,9 +13,8 @@ private:
     int row;
     int column;
     double cost;
-    State<T> cameFrom;
+    State<T>* cameFrom;
     enum color color;
-
 public:
     State(T state) : state(state) {
         this->cameFrom = nullptr;
@@ -53,11 +54,11 @@ public:
     }
 
 
-    const State<T> &getCameFrom() {
-        return cameFrom;
+    const State<T> *getCameFrom() {
+        return this->cameFrom;
     }
 
-    void setCameFrom(const State<T> &cameFrom) {
+    void setCameFrom(State<T> *cameFrom) {
         this->cameFrom = cameFrom;
     }
 
@@ -84,7 +85,9 @@ public:
     bool operator>=(const State &rhs) const {
         return !(*this < rhs);
     }
+    bool operator==(const State &rhs) const {
+        return this->state == rhs.state;
+    }
 };
-
 
 #endif //PROJECT2_STATE_H

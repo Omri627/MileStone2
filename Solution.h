@@ -2,10 +2,12 @@
 #define PROJECT2_SOLUTION_H
 
 #include <string>
+#include <ostream>
+
 using namespace std;
 class Solution {
 public:
-    virtual string StringRepresentation() = 0;
+    virtual string StringRepresentation() const = 0;
 
 };
 

@@ -1,5 +1,7 @@
 #ifndef PROJECT2_SEARCHERSOLUTION_H
 #define PROJECT2_SEARCHERSOLUTION_H
+
+#include <ostream>
 #include "Solution.h"
 
 class SearcherSolution : public Solution {
@@ -17,8 +19,8 @@ public:
 
     void setLength(int length);
 
-    virtual string StringRepresentation();
-};
+    virtual string StringRepresentation() const;
 
+};
 
 #endif //PROJECT2_SEARCHERSOLUTION_H

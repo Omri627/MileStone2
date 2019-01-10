@@ -3,6 +3,8 @@
 
 #include <map>
 #include <iterator>
+#include "MazeGame.h"
+#include "SearcherSolution.h"
 
 using namespace std;
 template <class Problem, class Solution>
@@ -12,7 +14,7 @@ public:
 
     virtual Solution getSolution(Problem problem) = 0;
 
-    virtual void storeSolution(Problem p, Solution s) = 0;
+    virtual void storeSolution(Problem problem, Solution solution) = 0;
 };
 
 #endif
