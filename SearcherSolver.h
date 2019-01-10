@@ -13,12 +13,21 @@ class SearcherSolver : public Solver<Searchable<T>* , Solution*> {
 private:
     Searcher<T>* searcher;
 public:
-    SearcherSolver(Searcher<T>* searcher);
+    SearcherSolver(Searcher<T>* searcher) {
+        this->searcher = searcher;
+    }
 
-    virtual Solution* solve(Searchable<T>* problem);
+    virtual Solution* solve(Searchable<T>* problem) {
+        return this->searcher->search(problem);
+    }
 
-    const Searcher<T>* getSearcher() const;
+    const Searcher<T>* getSearcher() const {
+        return this->searcher;
+    }
 
-    void setSearcher(Searcher<T> *searcher);
+    void setSearcher(Searcher<T> *searcher) {
+        this->searcher = searcher;
+    }
 };
+
 #endif

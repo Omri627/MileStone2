@@ -1,7 +1,3 @@
-//
-// Created by ranraboh on 09/01/19.
-//
-
 #include "SearcherSolution.h"
 
 SearcherSolution::SearcherSolution(int totalCost, int length) {
