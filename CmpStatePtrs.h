@@ -5,9 +5,9 @@
 template <class T>
 class CmpStatesPtrs{
 public:
-    bool operator()(const State<T>* lhs, const State<T>* rhs) const
+    bool operator()(const T lhs, const T rhs) const
     {
-        return lhs->getCost() < rhs->getCost();
+        return lhs->getCost() > rhs->getCost();
     }
 };
 #endif //PROJECT2_CMPSTATEPTRS_H
