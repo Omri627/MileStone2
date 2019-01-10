@@ -54,7 +54,7 @@ public:
     }
 
 
-    const State<T> *getCameFrom() {
+    State<T> *getCameFrom() {
         return this->cameFrom;
     }
 

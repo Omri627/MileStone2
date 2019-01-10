@@ -11,12 +11,12 @@ class Searcher {
 public:
     virtual Solution *search(Searchable<T> *searchable) = 0;
 
-    virtual double getCostOfPath(State<T> start, State<T> end)  {
+    virtual double getCostOfPath(State<T>* start, State<T>* end) {
         double sum = 0;
-        State<T> temp = end;
+        State<T>* temp= end;
         while (temp != start) {
-            sum += temp.getCost();
-            temp = temp.getCameFrom();
+            sum += temp->getState();
+            temp = temp->getCameFrom();
             if (temp == nullptr) {
                 //there is no path
                 return -1;
@@ -25,12 +25,12 @@ public:
         return sum;
     }
 
-    virtual double getLengthOfPath(State<T> start, State<T> end) {
+    virtual double getLengthOfPath(State<T>* start, State<T>* end) {
         double counter = 0;
-        State<T> temp = end;
+        State<T>* temp = end;
         while (temp != start) {
             counter += 1;
-            temp = temp.getCameFrom();
+            temp = temp->getCameFrom();
             if (temp == nullptr) {
                 //there is no path
                 return -1;

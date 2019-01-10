@@ -20,7 +20,6 @@ public:
     void setLength(int length);
 
     virtual string StringRepresentation() const;
-
 };
 
 #endif //PROJECT2_SEARCHERSOLUTION_H

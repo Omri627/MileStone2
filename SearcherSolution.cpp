@@ -23,3 +23,5 @@ void SearcherSolution::setTotalCost(int totalCost) {
 void SearcherSolution::setLength(int length) {
     SearcherSolution::length = length;
 }
+
+

@@ -9,39 +9,41 @@
 using namespace std;
 
 template <class T>
-class BestFirstSearch :public Searcher<T>{
+class BestFirstSearch : public Searcher<T>{
 private:
-    MyPriorityQueue<State<T>> priorityQueue;
+    MyPriorityQueue<State<T>*> priorityQueue;
 
 public:
-    Solution* search(Searchable<State<T>> searchable) {
+    virtual Solution *search(Searchable<T> *searchable) {
         double newPath = 0;
         double oldPath = -1;
-        priorityQueue.emplace(searchable.getInitialState());
-        searchable.getInitialState().setColor(GRAY); //is state inside the pq is color is gray
+        priorityQueue.emplace(searchable->getInitialState());
+        searchable->getInitialState()->setColor(BLACK); //initial state should be black
 
         while (!priorityQueue.empty()) {
-            State<T> n = priorityQueue.pop();
-            n.setColor(BLACK); //color is black so we won't check n again
-            if (n == searchable.getGoalState()) {
-                double sum = getCostOfPath(searchable.getInitialState(), n);
-                double length = getLengthOfPath(searchable.getInitialState(), n);
+            State<T>* n = priorityQueue.top();
+            priorityQueue.remove(n);
+            n->setColor(BLACK); //color is black so we won't check n again
+            if (n == searchable->getGoalState()) {
+                double sum = this->getCostOfPath(searchable->getInitialState(), n);
+                double length = this->getLengthOfPath(searchable->getInitialState(), n);
                 if (sum != -1 && length != -1) {
                     return new SearcherSolution(sum, length);
                 }
                 return new SearcherSolution(-1, -1);
             }
 
-            list<State<T>> neighbors = searchable.getAllPossibleState(n); //all n neighbors
-            for (State<T> s : neighbors) {
-                if ((s.getColor() != BLACK) && (s.getColor() != GRAY)) {
+            list<State<T>*> neighbors = searchable->getAllPossibleState(n); //all n neighbors
+            for (State<T>* s : neighbors) {
+                if ((s->getColor() != BLACK) && (s->getColor() != GRAY)) {
                     s->setCameFrom(n);
-                    s.setColor(GRAY); //color is gray because we add it to queue
+                    s->setColor(GRAY); //color is gray because we add it to queue
                     priorityQueue.emplace(s);
                 } else {
-                    newPath = getCostOfPath(searchable.getInitialState(), s);
+                    newPath = this->getCostOfPath(searchable->getInitialState(), s);
+                    s->setCost(newPath);// update the sum of the path from the start to s.
                     if (newPath < oldPath || oldPath == -1) { //old path will be -1 only at the beginning
-                        if (s.getColor() != GRAY) {
+                        if (s->getColor() != GRAY) {
                             //if s is not in pq add to pq
                             priorityQueue.emplace(s);
                             oldPath = newPath;

@@ -69,15 +69,15 @@ public:
     }
 
     virtual bool isStateExist(position position) {
-        if (position.row > this->matrixSize || position.row < 0
-            || position.column > this->matrixSize || position.column < 0)
+        if (position.row > this->matrixSize - 1 || position.row < 0
+            || position.column > this->matrixSize - 1 || position.column < 0)
             return false;
         return true;
     }
 
     virtual bool isStateExist(int row, int column) {
-        if (row > this->matrixSize || row < 0
-            || column > this->matrixSize || column < 0)
+        if (row > this->matrixSize - 1 || row < 0
+            || column > this->matrixSize - 1 || column < 0)
             return false;
         return true;
     }
