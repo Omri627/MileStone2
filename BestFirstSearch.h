@@ -61,6 +61,7 @@ public:
                 }
             }
         }
+        return new SearcherSolution(-1, -1);
     }
 };
 

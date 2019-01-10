@@ -88,15 +88,27 @@ public:
 
     virtual list<State<T> *> getAllPossibleState(State<T> *state) {
         list < State<T> * > neighbors;
-        if (this->isStateExist(state->getRow() - 1, state->getColumn()) && state->getState() != -1)
+        if (this->isStateExist(state->getRow() - 1, state->getColumn())
+            && !isWall(state->getRow() - 1, state->getColumn()))
             neighbors.push_back(this->getState(state->getRow() - 1, state->getColumn()));
-        if (this->isStateExist(state->getRow(), state->getColumn() - 1) && state->getState() != -1)
+
+        if (this->isStateExist(state->getRow(), state->getColumn() - 1)
+            && !isWall(state->getRow(), state->getColumn() - 1))
             neighbors.push_back(this->getState(state->getRow(), state->getColumn() - 1));
-        if (this->isStateExist(state->getRow() + 1, state->getColumn()) && state->getState() != -1)
+
+        if (this->isStateExist(state->getRow() + 1, state->getColumn())
+            && !isWall(state->getRow() + 1, state->getColumn()))
             neighbors.push_back(this->getState(state->getRow() + 1, state->getColumn()));
-        if (this->isStateExist(state->getRow(), state->getColumn() + 1) && state->getState() != -1)
+
+        if (this->isStateExist(state->getRow(), state->getColumn() + 1)
+            && !isWall(state->getRow(), state->getColumn() + 1))
             neighbors.push_back(this->getState(state->getRow(), state->getColumn() + 1));
+
         return neighbors;
+    }
+
+    bool isWall(int row, int col){
+        return this->getState(row, col)->getState() == -1;
     }
 
     virtual matrix getStates() {
