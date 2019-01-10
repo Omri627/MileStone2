@@ -2,6 +2,7 @@
     #define FILE_CACHE_MANAGER
 
 #include <string>
+#include <fstream>
 #include "CacheManager.h"
 using namespace std;
 
