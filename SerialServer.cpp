@@ -143,3 +143,39 @@ void SerialServer::closeClientConnection() {
     close(this->clientFd);
     this->clientFd = -1;
 }
+
+string SerialServer::readData() {
+    pthread_mutex_lock(&global_mutex);
+    const int bufferSize = 512;
+    int bytesReaded;
+    char buffer[bufferSize];
+    bzero(buffer,bufferSize);                      // set buffer with null values
+    cout << "flush" << endl;
+    bytesReaded = read(this->clientFd, buffer, bufferSize-1);
+    if (bytesReaded < 0) {
+        perror("ERROR reading from socket");
+        exit(1);
+    }
+    pthread_mutex_unlock(&global_mutex);
+    buffer[bytesReaded-2] = 0;
+    return buffer;
+}
+
+void SerialServer::sendData(string data) {
+    int byteTransmitted;
+    /* convert string data into array of characters to transmit */
+    const char * charactersData = data.c_str();
+    char * msgToTransmit = (char*)malloc(sizeof(charactersData) + 2);
+    strcpy(msgToTransmit, charactersData);
+    msgToTransmit[strlen(msgToTransmit)] = '\r\n';
+    //strcat(msgToTransmit, "\r\n");
+    cout << data << endl;
+    /* Send message to the server */
+    pthread_mutex_lock(&global_mutex);
+    byteTransmitted = write(this->clientFd, msgToTransmit, strlen(msgToTransmit));
+    pthread_mutex_unlock(&global_mutex);
+    if (byteTransmitted < 0) {
+        perror("ERROR writing to socket");
+        exit(1);
+    }
+}
