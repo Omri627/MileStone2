@@ -16,6 +16,12 @@ int main() {
     string row4 = "1,2,2,2";
     string row5 = "1,2,2,2";
     string row6 = "1,1,1,1";
+    data.push_back(row1);
+    data.push_back(row2);
+    data.push_back(row3);
+    data.push_back(row4);
+    data.push_back(row5);
+    data.push_back(row6);
     MazeGame<int>* mazeGame = new MazeGame<int>(data);
 
     delete server;
