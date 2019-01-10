@@ -6,27 +6,21 @@
 template <class T>
 class Dfs : public Searcher<T> {
 private:
-    void initializeSinglePair(Searchable<T>* searchable) {
-        searchable->getInitialState().setCost(0);
+    void initialize(Searchable<T>* searchable) {
+        searchable->getInitialState()->setCost(0);
+        searchable->getInitialState()->setColor(GRAY);
     }
-
-    void dfsVisit(State<T> state, Searchable<T>* searchable) {
-        static int t = 0;
-        state.setColor(GRAY);
-        list < State<T>> neighbors = searchable->getAllPossibleState(state);
-        for (State<T> neighbor : neighbors) {
-            if (neighbor == searchable->getGoalState()) {
-                neighbor.setCameFrom(&state);
-                break;
-            }
-            if (neighbor.getColor() == WHITE) {
+    void dfsVisit(State<T>* state, Searchable<T>* searchable) {
+        state->setColor(GRAY);
+        list < State<T> *> neighbors = searchable->getAllPossibleState(state);
+        for (State<T>* neighbor : neighbors) {
+            relax(state, neighbor);
+            if (neighbor->getColor() == WHITE) {
                 dfsVisit(neighbor, searchable);
-                neighbor.setCameFrom(&state);
+                neighbor->setCameFrom(state);
             }
         }
-        state.setColor(BLACK);
-        state.setCost(t);
-        t = t + 1;
+        state->setColor(BLACK);
     }
 public:
     Dfs() {
@@ -34,15 +28,23 @@ public:
     }
 
     virtual Solution* search(Searchable<T>* searchable) {
-        int cost, sum;
+        int cost, sum;                  // cost and sum of path
+        initialize(searchable);
         dfsVisit(searchable->getInitialState(), searchable);
-        cost = this->getCostOfPath(searchable->getInitialState(), searchable.getGoalState());
-        sum = this->getLengthOfPath(searchable->getInitialState(), searchable.getGoalState());
+        cost = searchable->getGoalState()->getCost();
+        sum = this->getLengthOfPath(searchable->getInitialState(), searchable->getGoalState());
         return new SearcherSolution(cost, sum);
     }
 
-};
+    void relax(State<T>* from, State<T> * to) {
+        if (to->getCost() > from->getCost() + to->getState() || to->getCost() == -1) {
+            to->setCost(from->getCost() + to->getState());
+            to->setCameFrom(from);
+        }
+    }
 
+
+};
 
 
 #endif
