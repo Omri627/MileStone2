@@ -10,21 +10,25 @@
 template <class T>
 class MazeGame : public Searchable<T> {
 private:
-    map<position, State<T> > states;
-    State<T> initialState;
-    State<T> goalState;
+    typedef vector<vector<State<T>*>> matrix;
+    int matrixSize
+    matrix statesMatrix;
+    State<T>* initialState;
+    State<T>* goalState;
 
 public:
-    MazeGame(map<position, State<T> > states, State<T> initialState, State<T> goalState){
-        this->states = states;
+    MazeGame(matrix states, State<T>* initialState, State<T>* goalState, int matrixSize){
+        this->statesMatrix = states;
         this->initialState = initialState;
         this->goalState = goalState;
+        this->matrixSize = matrixSize;
     }
 
-    MazeGame(map<position, State<T> > states, struct position initial, struct position goal){
+    MazeGame(matrix states, struct position initial, struct position goal, int matrixSize){
         this->states = states;
         this->initialState = getState(initial);
         this->goalState = getState(goal);
+        this->matrixSize = matrixSize;
     }
 
     virtual State<T> getInitialState(){
@@ -36,22 +40,18 @@ public:
     }
 
     virtual State<T> getState(position position) {
-        return this->states[position];
+        return this->states[position.row][position.column];
     }
 
     virtual bool isStateExist(position position) {
-        typename list<State<T>>::iterator iterator;
-        iterator = this->states.find(position);
-        if (iterator == this->states.end())
+        if (position.row > this->matrixSize || position.row < 0
+                || position.column > this->matrixSize || position.column < 0)
             return false;
         return true;
     }
 
     virtual State<T> getState(int row, int column){
-        struct position position;
-        position.row = row;
-        position.column = column;
-        return this->getState(position);
+        this->statesMatrix[row][column];
     }
 
     virtual list <State<T>> getAllPossibleState(State<T> state) {
@@ -70,32 +70,29 @@ public:
     static MazeGame *createMazeFromData(vector<string> data) {
         position initialPosition;
         position goalPosition;
-        position nodePoistion;
-        map < position, State<T> > states;
+        matrix matrixStates;
         const char* buffer;
         T weight;
-        State<T> state;
+        State<T>* state;
         char delimiter;
         for (int i = 0, j = 0; i < data.size() - 2; i++) {
             istringstream rowStream(data[i]);
             j = 0;
             while (rowStream >> weight) {
-                nodePoistion.row = i;
-                nodePoistion.column = j;
                 state = new State<T>(weight, i, j);
-                states[nodePoistion] = state;
+                matrixStates[i][j] = state;
                 rowStream >> delimiter;
                 j++;
             }
         }
-        buffer = data[data.size() - 2].c_str();
+        buffer = data[0].c_str();
         sscanf(buffer, "%d,%d", &initialPosition.row, &initialPosition.column);
-        buffer = data[data.size() - 1].c_str();
+        buffer = data[1].c_str();
         sscanf(buffer, "%d,%d", &goalPosition.row, &goalPosition.column);
-        return new MazeGame(states, initialPosition, goalPosition);
+        return new MazeGame(matrixStates, initialPosition, goalPosition);
     }
 
-    virtual map<position, State<T>> getStates(){
+    virtual matrix getStates(){
         return this->states;
     }
 };
