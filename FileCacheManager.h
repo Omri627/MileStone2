@@ -56,7 +56,7 @@ private:
 public:
     FileCacheManager(string fileUrl) {
         this->fileUrl = fileUrl;
-        this->loadMap();
+        //this->loadMap();
     }
 
     virtual bool isSolutionExist(Problem problem) {
