@@ -3,7 +3,7 @@
 #define PROJECT2_BESTFIRSTSEARCH_H
 
 #include "Searcher.h"
-#include "MyPriorityQueue.h"
+#include "StatePriorityQueue.h"
 #include "SearcherSolution.h"
 #include "vector"
 #include "CmpStatePtrs.h"
@@ -11,14 +11,14 @@
 using namespace std;
 
 template <class T>
-class BestFirstSearch : public Searcher<T>{
+class BestFirstSearch : public Searcher<T> {
 private:
-    MyPriorityQueue<State<T>*> priorityQueue;
+    StatePriorityQueue<State<T>*> priorityQueue;
 
 public:
     virtual Solution *search(Searchable<T> *searchable) {
         double newPath = 0;
-        double oldPath = -5;
+        double oldPath = -1;
         priorityQueue.emplace(searchable->getInitialState());
         searchable->getInitialState()->setColor(BLACK); //initial state should be black
 
@@ -43,18 +43,15 @@ public:
                         s->setColor(GRAY); //color is gray because we add it to queue
                         // update the sum of the path from the start to s
                         s->setCost(this->getCostOfPath(searchable->getInitialState(), s));
-                        priorityQueue.remove(s);
-                        priorityQueue.emplace(s);
+                        removeAndEmplace(s);
                     } else {
-                        if (s->getCost() < oldPath || oldPath == -5) { //old path will be -1 only at the beginning
+                        if (s->getCost() < oldPath || oldPath == -1) { //old path will be -1 only at the beginning
                             if (s->getColor() != GRAY) {
                                 //if s is not in pq add to pq
-                                priorityQueue.remove(s);
-                                priorityQueue.emplace(s);
-                                oldPath = newPath;
+                                removeAndEmplace(s);
+                                oldPath = s->getCost();
                             } else {
-                                priorityQueue.remove(s);
-                                priorityQueue.emplace(s);
+                                removeAndEmplace(s);
                             }
                         }
                     }
@@ -63,7 +60,15 @@ public:
         }
         return new SearcherSolution(-1, -1);
     }
+
+private:
+
+    void removeAndEmplace(State<T>* s) {
+        priorityQueue.remove(s);
+        priorityQueue.emplace(s);
+    }
 };
+
 
 
 
