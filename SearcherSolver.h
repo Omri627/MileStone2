@@ -9,7 +9,7 @@
 #include "Solver.h"
 #include "SearcherSolution.h"
 template <class T>
-class SearcherSolver : public Solver<Searchable<T>* , Solution*> {
+class SearcherSolver : public Solver<Searchable<T>* , SearcherSolution*> {
 private:
     Searcher<T>* searcher;
 public:
@@ -17,7 +17,7 @@ public:
         this->searcher = searcher;
     }
 
-    virtual Solution* solve(Searchable<T>* problem) {
+    virtual SearcherSolution* solve(Searchable<T>* problem) {
         return this->searcher->search(problem);
     }
 

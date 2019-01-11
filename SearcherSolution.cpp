@@ -17,11 +17,33 @@ string SearcherSolution::StringRepresentation() const {
 }
 
 void SearcherSolution::setTotalCost(int totalCost) {
-    SearcherSolution::totalCost = totalCost;
+    this->totalCost = totalCost;
 }
 
 void SearcherSolution::setLength(int length) {
-    SearcherSolution::length = length;
+    this->length = length;
+}
+
+/*ostream &operator<<(ostream &os, SearcherSolution const*solution) {
+    os << solution->StringRepresentation() << endl;
+    return os;
+}*/
+istream &operator>>(istream &is, SearcherSolution *solution) {
+    string buffer;                  // solution representation
+    int cost, length;               // cost, length fields of solution
+
+    /* read solution from stream and process his data */
+    is >> buffer;
+    cost = stoi(buffer);
+    is >> buffer;
+    length = stoi(buffer);
+
+    /* set data of solution object */
+    solution = new SearcherSolution(cost, length);
+}
+
+void SearcherSolution::readSolution(istream &is) {
+    is >> this;
 }
 
 

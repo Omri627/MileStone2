@@ -20,6 +20,16 @@ public:
     void setLength(int length);
 
     virtual string StringRepresentation() const;
+
+    virtual void readSolution(istream& is);
+
+    //friend ostream &operator<<(ostream &os, SearcherSolution const*solution);
+
+    friend istream &operator>>(istream &is, SearcherSolution *solution);
+
 };
+
+
+
 
 #endif //PROJECT2_SEARCHERSOLUTION_H

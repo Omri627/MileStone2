@@ -12,12 +12,13 @@ private:
     }
     void dfsVisit(State<T>* state, Searchable<T>* searchable) {
         state->setColor(GRAY);
+        cout << "(" << state->getRow() << "," << state->getColumn() << ")" << endl;
         list < State<T> *> neighbors = searchable->getAllPossibleState(state);
         for (State<T>* neighbor : neighbors) {
-            relax(state, neighbor);
+            this->relax(state, neighbor);
             if (neighbor->getColor() == WHITE) {
-                dfsVisit(neighbor, searchable);
                 neighbor->setCameFrom(state);
+                dfsVisit(neighbor, searchable);
             }
         }
         state->setColor(BLACK);
@@ -36,12 +37,6 @@ public:
         return new SearcherSolution(cost, sum);
     }
 
-    void relax(State<T>* from, State<T> * to) {
-        if (to->getCost() > from->getCost() + to->getState() || to->getCost() == -1) {
-            to->setCost(from->getCost() + to->getState());
-            to->setCameFrom(from);
-        }
-    }
 
 
 };

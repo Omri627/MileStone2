@@ -21,19 +21,22 @@ private:
         return this->solutions.end();
     }
 
-    void loadMap() {
-        Problem problem;            // problem
-        Solution solution;          // solution
-        ifstream file;              // input stream
+    void loadMap () {
+        Problem problem;                // stored problem
+        Solution solution;                // stored solution
+        string delimiter;               // delimiter buffer
+        ifstream file;                  // input stream of file
+
+        /* open data file */
         file.open(this->fileUrl);
-        if (!file) {
+        if (!file)
             return;
-            // cerr << "Unable to open file";
-            //exit(1);   // call system to stop
-        }
-        while (file >> problem) {
-            file >> solution;
-            file >> solution;
+
+        /* load instances of problem one by one and store in cache object */
+        while (!file.eof()) {
+            file >> problem;            // load specific problem
+            file >> delimiter;          // ignore delimiter between problem and solution
+            file >> solution;           // load solution for problem
             this->storeSolution(problem, solution);
         }
     }
@@ -44,7 +47,7 @@ private:
         typename map < Problem, Solution >::iterator iterator;
         iterator = this->getStartIterator();
         while (iterator != this->getEndIterator()) {
-            //file << iterator->first << endl << "$" << endl << iterator->second << endl;
+            file << *iterator->first << "$" << endl << iterator->second << endl;
             iterator++;
         }
         file.close();

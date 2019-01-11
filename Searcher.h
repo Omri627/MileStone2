@@ -8,9 +8,13 @@
 using namespace std;
 template <class T>
 class Searcher {
-public:
-    virtual Solution *search(Searchable<T> *searchable) = 0;
-
+protected:
+    void relax(State<T>* from, State<T> * to) {
+        if (to->getCost() > from->getCost() + to->getState() || to->getCost() == -1) {
+            to->setCost(from->getCost() + to->getState());
+            to->setCameFrom(from);
+        }
+    }
     virtual double getCostOfPath(State<T>* start, State<T>* end) {
         double sum = 0;
         State<T>* temp= end;
@@ -39,6 +43,12 @@ public:
         }
         return counter;
     }
+
+
+public:
+    virtual SearcherSolution *search(Searchable<T> *searchable) = 0;
+
+
 
 
 };

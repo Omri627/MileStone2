@@ -6,7 +6,7 @@ class Server;
 using namespace std;
 class ClientHandler {
 public:
-    virtual void handleClient(Server * server) = 0;
+    virtual int handleClient(Server * server) = 0;
 
     virtual ~ClientHandler();
 };

@@ -16,7 +16,8 @@ string SerialServer::readData() {
     int bytesReaded;
     char buffer[bufferSize];
     bzero(buffer,bufferSize);                      // set buffer with null values
-    cout << "flush" << endl;
+    //todo: flush
+    cout << "";
     bytesReaded = read(this->clientFd, buffer, bufferSize-1);
     if (bytesReaded < 0) {
         perror("ERROR reading from socket");
@@ -100,25 +101,39 @@ void SerialServer::open(int port, ClientHandler* clientHandler) {
     pthread_t createThread, listenThread;         // thread for create server with port
     create_params createParams;                   // parameters for create method
     struct timespec abstime;                      // timer object
+    int end = 1;
     createParams.server = this;
     createParams.port = port;
+
     /* create thread to create server with given port */
     pthread_create(&createThread, nullptr, &SerialServer::createServerHelper, &createParams);
     pthread_join(createThread, nullptr);
+
     /* connect and handle each client */
     while (true) {
         /* set timer for listen thread */
         clock_gettime(CLOCK_REALTIME, &abstime);
         abstime.tv_sec += 10;
+
         /* create thread to listen for possible clients requests */
         pthread_create(&listenThread, nullptr, &SerialServer::listenToClientHelper, this);
         pthread_timedjoin_np(listenThread, nullptr, &abstime);
+
+        /* close if timer is over */
         if (this->clientFd <= 0) {
             cout << "time elapsed" << endl;
             break;
         }
-        /* break if timout is over */
-        clientHandler->handleClient(this);
+        /* handle all client requests */
+        end = 1;
+        while (end) {
+            try {
+                end = clientHandler->handleClient(this);
+            } catch (const char* error) {
+                this->sendData(error);
+            }
+        }
+        /* close connection with client */
         this->closeClientConnection();
     }
     delete(clientHandler);

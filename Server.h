@@ -9,6 +9,7 @@
 #include <unistd.h>
 #include <netinet/in.h>
 #include <string>
+#define END "end"
 using namespace std;
 class Server {
 public:

@@ -19,8 +19,6 @@ public:
     virtual State<T>* getGoalState() const = 0;
 
     virtual list<State<T>*> getAllPossibleState(State<T>* s) = 0;
-
-    //virtual list<State<T>*> getNeighbors(State<T> state);
 };
 
 #endif //PROJECT2_SEARCHABLE_H

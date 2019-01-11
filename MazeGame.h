@@ -6,15 +6,37 @@
 #include "Searchable.h"
 #include <vector>
 #include <sstream>
+#include <ostream>
+#include <istream>
 
 template <class T>
 class MazeGame : public Searchable<T> {
 private:
     typedef vector<vector<State<T> *>> matrix;
-    int matrixSize;
+    unsigned long matrixSize;
     matrix statesMatrix;
     State<T> *initialState;
     State<T> *goalState;
+
+    bool isValidData(vector<string> data) {
+        if (!isValidMatrixRow(data[0], 1) || !isValidMatrixRow(data[1], 1))
+            return false;
+        for (int i = 2; i < data.size(); i++)
+            if (!isValidMatrixRow(data[i], 0))
+                return false;
+        return true;
+    }
+
+    static bool isValidMatrixRow(string row, int elements) {
+        unsigned long commas = 0;
+        for (int i = 0; i < row.size(); i++) {
+            if (row[i] == ',')
+                commas++;
+            if ((row[i] < '0' || row[i] > '9') && row[i] != '.' && row[i] != ',')
+                return false;
+        }
+        return (commas == elements)?true : false;
+    }
 
     MazeGame<T> *createMazeFromData(vector<string> data) {
         position initialPosition;
@@ -28,8 +50,8 @@ private:
             istringstream rowStream(row);
             j = 0;
             while (rowStream >> weight) {
-                state = new State<T>(weight, i-2, j);
-                this->setState(i-2, j, state);
+                state = new State<T>(weight, i - 2, j);
+                this->setState(i - 2, j, state);
                 rowStream >> delimiter;
                 j++;
             }
@@ -44,14 +66,14 @@ private:
 
 
 public:
-    MazeGame(matrix states, State<T> *initialState, State<T> *goalState, int matrixSize) {
+    MazeGame(matrix states, State<T> *initialState, State<T> *goalState, unsigned long matrixSize) {
         this->statesMatrix = states;
         this->initialState = initialState;
         this->goalState = goalState;
         this->matrixSize = matrixSize;
     }
 
-    MazeGame(matrix states, struct position initial, struct position goal, int matrixSize) {
+    MazeGame(matrix states, struct position initial, struct position goal, unsigned long matrixSize) {
         this->states = states;
         this->initialState = getState(initial);
         this->goalState = getState(goal);
@@ -107,12 +129,8 @@ public:
         return neighbors;
     }
 
-    bool isWall(int row, int col){
+    bool isWall(int row, int col) {
         return this->getState(row, col)->getState() == -1;
-    }
-
-    virtual matrix getStates() {
-        return this->statesMatrix;
     }
 
     State<T> *getInitialState() const {
@@ -132,9 +150,6 @@ public:
     }
 
     void setState(int row, int column, State<T> *state) {
-/*        vector<State<T> *> rowVector;
-        rowVector = this->statesMatrix.at(row);
-        rowVector.at(column) = state;*/
         this->statesMatrix[row][column] = state;
     }
 
@@ -147,9 +162,38 @@ public:
             this->statesMatrix.push_back(rowVector);
         }
     }
-
+    template <class U>
+    friend ostream& operator<<(ostream &os, const MazeGame<U> &game) {
+        os << game.matrixSize << endl;
+        os << game.getInitialState()->getRow() << "," << game.getInitialState()->getColumn() << endl;
+        os << game.getGoalState()->getRow() << "," << game.getGoalState()->getColumn() << endl;
+        for (int i = 0; i < game.matrixSize; i++) {
+            vector<State<T>*> row = game.statesMatrix[i];
+            for (int j = 0; j < game.matrixSize - 1; j++) {
+                os << ((State<T>*)row.at(j))->getState() << ",";
+            }
+            os <<  ((State<T>*)row.at(game.matrixSize-1))->getState() << endl;
+        }
+        return os;
+    }
+    template <class U>
+    friend istream& operator >>(istream &is, MazeGame<U> *game) {
+        int matrixSize;                     // matrix size
+        string buffer;                      // buffer of file's data
+        vector<string> data;                // the game data
+        if (is.eof())
+            return is;
+        is >> matrixSize;
+        getline(is, buffer);
+        for (int i = 0; i < matrixSize+2; i++) {
+            getline(is, buffer);
+            if (buffer != "")
+                data.push_back(buffer);
+        }
+        game = new MazeGame<U>(data);
+        return is;
+    }
 };
-
 
 
 #endif
