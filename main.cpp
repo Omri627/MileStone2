@@ -7,7 +7,6 @@
 #include "Dfs.h"
 #include "BestFirstSearch.h"
 #include "SearcherSolution.h"
-#include "MyPriorityQueue.h"
 #include "Bfs.h"
 int main() {
     SerialServer* server = new SerialServer("127.0.0.1");

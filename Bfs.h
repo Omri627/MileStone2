@@ -1,11 +1,10 @@
 #ifndef BREADTH_FIRST_SEARCH
     #define BREADTH_FIRST_SEARCH
 
-#include "MyPriorityQueue.h"
-#include "Searcher.h"
+    #include "Searcher.h"
 #include "MazeGame.h"
 #include "SearcherSolution.h"
-
+#include "StatePriorityQueue.h"
 template <class T>
 class Bfs : public Searcher<T> {
 private:
@@ -15,7 +14,7 @@ private:
     }
 
     void bfsAlgorithm(Searchable<T> *searchable) {
-        MyPriorityQueue<State<T>*> priorityQueue;
+        StatePriorityQueue<State<T>*> priorityQueue;
         priorityQueue.push(searchable->getInitialState());
         State<T>* state;
         list<State<T>*> neighbors;
