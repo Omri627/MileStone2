@@ -16,7 +16,7 @@ private:
     StatePriorityQueue<State<T>*> priorityQueue;
 
 public:
-    virtual Solution *search(Searchable<T> *searchable) {
+    virtual SearcherSolution *search(Searchable<T> *searchable) {
         double newPath = 0;
         double oldPath = -1;
         priorityQueue.emplace(searchable->getInitialState());

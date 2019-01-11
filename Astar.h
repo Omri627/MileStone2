@@ -13,7 +13,7 @@ private:
     PairPriorityQueue<State<T>*,int> priorityQueue;
 
 public:
-    virtual Solution *search(Searchable<T> *searchable) {
+    virtual SearcherSolution *search(Searchable<T> *searchable) {
         State<T>* initialState = searchable->getInitialState();
         double oldPath = -1;
         priorityQueue.emplace(make_pair(initialState, 0));

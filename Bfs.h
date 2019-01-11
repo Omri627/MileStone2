@@ -1,7 +1,7 @@
 #ifndef BREADTH_FIRST_SEARCH
     #define BREADTH_FIRST_SEARCH
 
-#include "MyPriorityQueue.h"
+#include "StatePriorityQueue.h"
 #include "Searcher.h"
 #include "MazeGame.h"
 #include "SearcherSolution.h"
@@ -15,7 +15,7 @@ private:
     }
 
     void bfsAlgorithm(Searchable<T> *searchable) {
-        MyPriorityQueue<State<T>*> priorityQueue;
+        StatePriorityQueue<State<T>*> priorityQueue;
         priorityQueue.push(searchable->getInitialState());
         State<T>* state;
         list<State<T>*> neighbors;
