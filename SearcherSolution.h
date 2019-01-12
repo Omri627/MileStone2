@@ -39,7 +39,7 @@ public:
 
     //friend ostream &operator<<(ostream &os, SearcherSolution const*solution);
 
-    friend istream &operator>>(istream &is, SearcherSolution *solution);
+    friend istream &operator>>(istream &is, SearcherSolution **solution);
 
 };
 

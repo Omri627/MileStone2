@@ -13,13 +13,13 @@ private:
     int row;
     int column;
     double cost;
-    State<T>* cameFrom;
+    State<T> *cameFrom;
     enum color color;
 public:
     State(T state) : state(state) {
         this->cameFrom = nullptr;
         this->color = WHITE;
-        this->cost =-1;
+        this->cost = -1;
     }
 
     State(T state, double cost) : state(state), cost(cost) {
@@ -88,8 +88,13 @@ public:
     bool operator>=(const State &rhs) const {
         return !(*this < rhs);
     }
+
     bool operator==(const State &rhs) const {
         return this->state == rhs.state;
+    }
+
+    bool operator!=(const State &rhs) const {
+        return this->state != rhs.state;
     }
 };
 

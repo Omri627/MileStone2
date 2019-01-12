@@ -27,7 +27,6 @@ public:
     Dfs() {
 
     }
-
     virtual SearcherSolution* search(Searchable<T>* searchable) {
         int cost, sum;                  // cost and sum of path
         initialize(searchable);
@@ -35,11 +34,9 @@ public:
         cost = searchable->getGoalState()->getCost();
         sum = this->getLengthOfPath(searchable->getInitialState(), searchable->getGoalState());
         string direction = this->getDirection(searchable->getInitialState(), searchable->getGoalState());
+        //todo: check direction who no path
         return new SearcherSolution(cost, sum, 0, direction);
     }
-
-
-
 };
 
 

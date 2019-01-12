@@ -41,7 +41,7 @@ void SearcherSolution::setLength(int length) {
     os << solution->StringRepresentation() << endl;
     return os;
 }*/
-istream &operator>>(istream &is, SearcherSolution *solution) {
+istream &operator>>(istream &is, SearcherSolution **solution) {
     string buffer;                  // solution representation
     int cost, length;               // cost, length fields of solution
 
@@ -52,7 +52,7 @@ istream &operator>>(istream &is, SearcherSolution *solution) {
     length = stoi(buffer);
 
     /* set data of solution object */
-    solution = new SearcherSolution(cost, length);
+    *solution = new SearcherSolution(cost, length);
 }
 
 void SearcherSolution::readSolution(istream &is) {

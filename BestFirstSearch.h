@@ -25,7 +25,7 @@ public:
         while (!priorityQueue.empty()) {
             State<T>* n = priorityQueue.top();
             priorityQueue.remove(n);
-            n->setColor(BLACK); //color is black so we won't check n again
+            n->setColor(BLACK);             //color is black so we won't check n again
             if (n == searchable->getGoalState()) {
                 double sum = this->getCostOfPath(searchable->getInitialState(), n);
                 double length = this->getLengthOfPath(searchable->getInitialState(), n);
@@ -63,7 +63,6 @@ public:
     }
 
 private:
-
     void removeAndEmplace(State<T>* s) {
         priorityQueue.remove(s);
         priorityQueue.emplace(s);

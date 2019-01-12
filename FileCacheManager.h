@@ -3,21 +3,22 @@
 
 #include <string>
 #include <fstream>
+#include "CmpMazeGame.h"
 #include "CacheManager.h"
 using namespace std;
 
 template <class Problem, class Solution>
 class FileCacheManager : public CacheManager<Problem, Solution> {
 private:
-    map<Problem, Solution> solutions;
-
+    map<Problem, Solution, CmpMazeGame<Problem> > solutions;
     string fileUrl;
+    //todo: change file name
 
-    typename map<Problem, Solution>::iterator getStartIterator() {
+    typename map<Problem, Solution, CmpMazeGame<Problem>>::iterator getStartIterator() {
         return this->solutions.begin();
     }
 
-    typename map<Problem, Solution>::iterator getEndIterator() {
+    typename map<Problem, Solution, CmpMazeGame<Problem>>::iterator getEndIterator() {
         return this->solutions.end();
     }
 
@@ -26,17 +27,16 @@ private:
         Solution solution;                // stored solution
         string delimiter;               // delimiter buffer
         ifstream file;                  // input stream of file
-
+        char newline;
         /* open data file */
         file.open(this->fileUrl);
         if (!file)
             return;
 
         /* load instances of problem one by one and store in cache object */
-        while (!file.eof()) {
-            file >> problem;            // load specific problem
+        while (file >> &problem) {
             file >> delimiter;          // ignore delimiter between problem and solution
-            file >> solution;           // load solution for problem
+            file >> &solution;           // load solution for problem
             this->storeSolution(problem, solution);
         }
     }
@@ -44,11 +44,12 @@ private:
     void saveData() {
         ofstream file;
         file.open(this->fileUrl);
-        typename map < Problem, Solution >::iterator iterator;
-        iterator = this->getStartIterator();
-        while (iterator != this->getEndIterator()) {
-            file << *iterator->first << "$" << endl << iterator->second << endl;
+        typename map < Problem, Solution, CmpMazeGame<Problem> >::iterator iterator;
+        iterator = this->solutions.begin();
+        while (iterator != this->solutions.end()) {
+            file << *iterator->first << "$" << endl << iterator->second;
             iterator++;
+            cout << "*";
         }
         file.close();
     }
@@ -56,11 +57,13 @@ private:
 public:
     FileCacheManager(string fileUrl) {
         this->fileUrl = fileUrl;
-        //this->loadMap();
+        this->loadMap();
     }
 
-    virtual bool isSolutionExist(Problem problem) {
-        if (this->solutions.find(problem) == this->getEndIterator())
+    virtual bool isSolutionExist(const Problem problem) {
+        typename map<Problem, Solution, CmpMazeGame<Problem>>::iterator iterator;
+        iterator = this->solutions.find(problem);
+        if (iterator == this->solutions.end())
             return false;
         return true;
     }

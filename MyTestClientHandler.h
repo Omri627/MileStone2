@@ -11,7 +11,7 @@
 #include "SearcherSolution.h"
 #include "MazeGame.h"
 #include "Utils.h"
-
+#include "ParallelServer.h"
 template <class T>
 class MyTestClientHandler : public ClientHandler {
 private:
@@ -27,17 +27,15 @@ public:
         this->solver = solver;
         this->cache = new FileCacheManager<MazeGame<T>*, SearcherSolution* >("cache.txt");
     }
-
-    virtual int handleClient(Server *server) {
+    virtual int handleClient(Server *server, Client* client) {
         const int commasInPoint = 1;       // number of commas allowed in initial and goal state input
         int linesInput;                    // number of lines in input data
         vector < string > data;            // data about the maze game
         MazeGame<T>* mazeGame;             // specific maze game problem
         SearcherSolution* solution;                // solution of maze problem
         string buffer;                     // data received by connected client
-
         /* get number of lines in input */
-        buffer = server->readData();
+        buffer = server->readData(client);
         if (buffer == END)
             return 0;
         if (!Utils::isNumber(buffer))
@@ -46,7 +44,7 @@ public:
 
         /* get full data of problem from client */
         for (int i = 0 ; i < linesInput; i++) {
-            buffer = server->readData();
+            buffer = server->readData(client);
             if (buffer == END)
                 return 0;
             if (!Utils::isValidMatrixRow(buffer, (i < 2)?commasInPoint:(linesInput-3)))
@@ -54,7 +52,6 @@ public:
             data.push_back(buffer);
         }
         mazeGame = new MazeGame<T>(data);
-
         /* get solution of this instance of problem */
         if (this->cache->isSolutionExist(mazeGame)) {
             cout << "cache" << endl;
@@ -65,7 +62,7 @@ public:
         }
 
         /* send solution to client */
-        server->sendData(solution->StringRepresentation());
+        server->sendData(solution->StringRepresentation(), client);
         return 1;
     }
 

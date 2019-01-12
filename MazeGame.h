@@ -18,6 +18,16 @@ private:
     State<T> *initialState;
     State<T> *goalState;
 
+    void initMatrix() {
+        for (int i = 0; i < this->matrixSize; i++) {
+            vector<State<T> *> rowVector;
+            for (int j = 0; j < this->matrixSize; j++) {
+                rowVector.push_back(nullptr);
+            }
+            this->statesMatrix.push_back(rowVector);
+        }
+    }
+
     bool isValidData(vector<string> data) {
         if (!isValidMatrixRow(data[0], 1) || !isValidMatrixRow(data[1], 1))
             return false;
@@ -86,6 +96,19 @@ public:
         this->createMazeFromData(data);
     }
 
+    MazeGame(MazeGame<T>& mazeGame) {
+        this->matrixSize = mazeGame.matrixSize;
+        this->initMatrix();
+        for (int i = 0; i < matrixSize; i++) {
+            for (int j = 0; j < matrixSize; j++) {
+                this->statesMatrix[i][j] = new State<T>(mazeGame.getState(i,j)->getState(), i,j);
+            }
+        }
+        this->initialState = this->getState(mazeGame.initialState->getRow(), mazeGame.initialState->getColumn());
+        this->goalState = this->getState(mazeGame.goalState->getRow(), mazeGame.goalState->getColumn());
+
+    }
+
     virtual State<T> *getState(position position) {
         return this->statesMatrix[position.row][position.column];
     }
@@ -152,16 +175,69 @@ public:
     void setState(int row, int column, State<T> *state) {
         this->statesMatrix[row][column] = state;
     }
-
-    void initMatrix() {
-        for (int i = 0; i < this->matrixSize; i++) {
-            vector<State<T> *> rowVector;
-            for (int j = 0; j < this->matrixSize; j++) {
-                rowVector.push_back(nullptr);
+    bool operator==(const MazeGame<T> &rhs) const {
+        if (this->matrixSize != rhs.matrixSize)
+            return false;
+        if (*this->getInitialState() != *rhs.getInitialState())
+            return false;
+        if (*this->getGoalState() != *rhs.getGoalState())
+            return false;
+        for (int i = 0; i < rhs.matrixSize; i++) {
+            for (int j = 0; j < rhs.matrixSize; j++) {
+                if (((State<T>*)statesMatrix[i][j])->getState() != ((State<T>*)rhs.statesMatrix[i][j])->getState())
+                    return false;
             }
-            this->statesMatrix.push_back(rowVector);
         }
+        return true;
     }
+
+    bool operator<(const MazeGame<T> &rhs) const {
+        if (this->matrixSize < rhs.matrixSize)
+            return true;
+        for (int i = 0; i < rhs.matrixSize; i++) {
+            for (int j = 0; j < rhs.matrixSize; j++) {
+                if (((State<T>*)this->statesMatrix[i][j])->getState() < ((State<T>*)rhs.statesMatrix[i][j])->getState())
+                    return true;
+            }
+        }
+        if (this->getInitialState()->getState() < rhs.getInitialState()->getState())
+            return true;
+        if (this->getGoalState()->getState() < rhs.getGoalState()->getState())
+            return true;
+        return false;
+    }
+
+    bool operator>(const MazeGame<T> &rhs) const {
+        return (rhs < *this);
+    }
+
+    bool operator<=(const MazeGame &rhs) const {
+        return !(rhs < *this);
+    }
+
+    bool operator>=(const MazeGame &rhs) const {
+        return !(*this < rhs);
+    }
+
+    bool operator==(const MazeGame<T> * rhs) const {
+        return this == *rhs;
+    }
+
+
+    bool operator!=(const MazeGame<T> &rhs) const {
+        return !(*this == rhs);
+    }
+
+    friend bool operator==(matrix m1, matrix m2) {
+        for (int i = 0; i < m1.size(); i++) {
+            for (int j = 0; j < m1.size(); j++) {
+                if (((State<T>*)m1[i][j])->getState() != ((State<T>*)m1[i][j])->getState())
+                    return false;
+            }
+        }
+        return true;
+    }
+
     template <class U>
     friend ostream& operator<<(ostream &os, const MazeGame<U> &game) {
         os << game.matrixSize << endl;
@@ -177,22 +253,28 @@ public:
         return os;
     }
     template <class U>
-    friend istream& operator >>(istream &is, MazeGame<U> *game) {
+    friend istream& operator >>(istream &is, MazeGame<U> **game) {
         int matrixSize;                     // matrix size
-        string buffer;                      // buffer of file's data
+        string buffer = "";                      // buffer of file's data
         vector<string> data;                // the game data
         if (is.eof())
             return is;
-        is >> matrixSize;
+        while (buffer == "") {
+            is >> buffer;
+            if (is.eof())
+                return is;
+        }
+        matrixSize = stoi(buffer);
         getline(is, buffer);
         for (int i = 0; i < matrixSize+2; i++) {
             getline(is, buffer);
             if (buffer != "")
                 data.push_back(buffer);
         }
-        game = new MazeGame<U>(data);
+        *game = new MazeGame<U>(data);
         return is;
     }
+
 };
 
 
