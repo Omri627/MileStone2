@@ -10,7 +10,7 @@ using namespace std;
 template <class T>
 class Astar : public Searcher<T> {
 private:
-    PairPriorityQueue<State<T>*,int> priorityQueue;
+    PairPriorityQueue<State<T>*,double> priorityQueue;
 
 public:
     virtual SearcherSolution *search(Searchable<T> *searchable) {
@@ -26,8 +26,9 @@ public:
             if (n == searchable->getGoalState()) {
                 double sum = this->getCostOfPath(initialState, n);
                 double length = this->getLengthOfPath(initialState, n);
+                string direction = this->getDirection(initialState, n);
                 if (sum != -1 && length != -1) {
-                    return new SearcherSolution(sum, length);
+                    return new SearcherSolution(sum, length, 0, direction);
                 }
                 return new SearcherSolution(-1, -1);
             }
@@ -59,13 +60,13 @@ public:
     }
 
 private:
-    int getManhDist(State<T>* start, State<T>* end) {
+    double getManhDist(State<T>* start, State<T>* end) {
         int x = abs(start->getRow() - end->getRow());
         int y = abs(start->getColumn() - end->getColumn());
-        return x + y;
+        return sqrt(x+y);
     }
 
-    void removeAndEmplace(pair<State<T>*,int> pair) {
+    void removeAndEmplace(pair<State<T>*,double> pair) {
         priorityQueue.remove(pair);
         priorityQueue.emplace(pair);
     }
