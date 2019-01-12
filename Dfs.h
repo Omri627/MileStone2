@@ -12,7 +12,7 @@ private:
     }
     void dfsVisit(State<T>* state, Searchable<T>* searchable) {
         state->setColor(GRAY);
-        cout << "(" << state->getRow() << "," << state->getColumn() << ")" << endl;
+        //cout << "(" << state->getRow() << "," << state->getColumn() << ")" << endl;
         list < State<T> *> neighbors = searchable->getAllPossibleState(state);
         for (State<T>* neighbor : neighbors) {
             this->relax(state, neighbor);
@@ -34,7 +34,8 @@ public:
         dfsVisit(searchable->getInitialState(), searchable);
         cost = searchable->getGoalState()->getCost();
         sum = this->getLengthOfPath(searchable->getInitialState(), searchable->getGoalState());
-        return new SearcherSolution(cost, sum);
+        string direction = this->getDirection(searchable->getInitialState(), searchable->getGoalState());
+        return new SearcherSolution(cost, sum, 0, direction);
     }
 
 

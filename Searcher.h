@@ -5,9 +5,42 @@
 #include "Searchable.h"
 #include "vector"
 #include "Solution.h"
+
+#define RIGHT "Right"
+#define LEFT "Left"
+#define DOWN "Down"
+#define UP "Up"
+
 using namespace std;
 template <class T>
 class Searcher {
+private:
+    string checkDirection(State<T>* prev, State<T>* curr) {
+        string dir;
+        if (curr->getRow() < prev->getRow()) {
+            dir = UP;
+        } else if (curr->getRow() > prev->getRow()) {
+            dir = DOWN;
+        } else if (curr->getColumn() < prev->getColumn()) {
+            dir = LEFT;
+        } else {
+            dir = RIGHT;
+        }
+        return dir;
+    }
+
+    string getDirectionFromVector(vector<string> vec) {
+        string res;
+        for (std::vector<string>::iterator it = vec.begin(); it != vec.end(); ++it ) {
+            res += *it;
+            res+= ", ";
+        }
+        if (!res.empty())
+            res = res.substr(0, res.length() -2);
+        return res;
+    }
+
+
 protected:
     void relax(State<T>* from, State<T> * to) {
         if (to->getCost() > from->getCost() + to->getState() || to->getCost() == -1) {
@@ -42,6 +75,22 @@ protected:
 
         }
         return counter;
+    }
+
+    virtual string getDirection(State<T>* start, State<T>* end) {
+        vector<string> directions;
+        string result;
+        State<T>* temp = end;
+        while (temp != start) {
+            result = checkDirection(temp->getCameFrom(), temp);
+            directions.insert(directions.begin(),result);
+            temp = temp->getCameFrom();
+        }
+        return getDirectionFromVector(directions);
+    }
+
+    virtual string getDevelopStates() {
+
     }
 
 

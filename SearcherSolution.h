@@ -8,8 +8,14 @@ class SearcherSolution : public Solution {
 private:
     int totalCost;
     int length;
+    int developStates;
+    string direction;
 public:
     SearcherSolution(int totalCost, int length);
+
+    SearcherSolution(int totalCost, int length, int developStates);
+
+    SearcherSolution(int totalCost, int length, int developStates, string direction);
 
     int getTotalCost() const;
 
@@ -18,6 +24,14 @@ public:
     void setTotalCost(int totalCost);
 
     void setLength(int length);
+
+    int getDevelopStates() const;
+
+    void setDevelopStates(int developStates);
+
+    const string &getDirection() const;
+
+    void setDirection(const string &direction);
 
     virtual string StringRepresentation() const;
 

@@ -39,7 +39,8 @@ public:
         this->bfsAlgorithm(searchable);
         cost = searchable->getGoalState()->getCost();
         length = this->getLengthOfPath(searchable->getInitialState(), searchable->getGoalState());
-        return new SearcherSolution(cost, length);
+        string direction = this->getDirection(searchable->getInitialState(), searchable->getGoalState());
+        return new SearcherSolution(cost, length,0 ,direction);
     }
 
 };

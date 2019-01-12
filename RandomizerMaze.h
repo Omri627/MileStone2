@@ -44,6 +44,22 @@ public:
         return new MazeGame<int>(matrix);
     }
 
+    static vector<string> readMatrix(istream &file) {
+        vector<string> mat;
+        int size;
+        file >> size;
+        for (int i = 0; i < size + 2 ; ++i) {
+            string line;
+            file >> line;
+            mat.push_back(line);
+        }
+
+        return mat;
+    }
+
+
+
+
 };
 
 

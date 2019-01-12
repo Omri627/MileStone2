@@ -5,6 +5,19 @@ SearcherSolution::SearcherSolution(int totalCost, int length) {
     this->length = length;
 }
 
+SearcherSolution::SearcherSolution(int totalCost, int length, int developStates) {
+    this->totalCost = totalCost;
+    this->length = length;
+    this->developStates = developStates;
+}
+
+SearcherSolution::SearcherSolution(int totalCost, int length, int developStates, string direction) {
+    this->totalCost = totalCost;
+    this->length = length;
+    this->developStates = developStates;
+    this->direction = direction;
+}
+
 int SearcherSolution::getTotalCost() const {
     return this->totalCost;
 }
@@ -44,6 +57,22 @@ istream &operator>>(istream &is, SearcherSolution *solution) {
 
 void SearcherSolution::readSolution(istream &is) {
     is >> this;
+}
+
+int SearcherSolution::getDevelopStates() const {
+    return developStates;
+}
+
+void SearcherSolution::setDevelopStates(int developStates) {
+    SearcherSolution::developStates = developStates;
+}
+
+const string &SearcherSolution::getDirection() const {
+    return direction;
+}
+
+void SearcherSolution::setDirection(const string &direction) {
+    SearcherSolution::direction = direction;
 }
 
 
