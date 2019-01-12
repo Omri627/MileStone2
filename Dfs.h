@@ -28,7 +28,7 @@ public:
 
     }
 
-    virtual Solution* search(Searchable<T>* searchable) {
+    virtual SearcherSolution* search(Searchable<T>* searchable) {
         int cost, sum;                  // cost and sum of path
         initialize(searchable);
         dfsVisit(searchable->getInitialState(), searchable);
