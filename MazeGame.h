@@ -127,7 +127,7 @@ public:
         return true;
     }
 
-    virtual State<T> *getState(int row, int column) {
+    virtual State<T>* getState(int row, int column) {
         return this->statesMatrix[row][column];
     }
 
@@ -150,6 +150,16 @@ public:
             neighbors.push_back(this->getState(state->getRow(), state->getColumn() + 1));
 
         return neighbors;
+    }
+
+    list<State<T>*> getAllStates() const {
+        list<State<T>*> all;
+        for (int i = 0; i < matrixSize; ++i) {
+            for (int j = 0; j < matrixSize; ++j) {
+                all.push_back(statesMatrix[i][j]);
+            }
+        }
+        return all;
     }
 
     bool isWall(int row, int col) {

@@ -33,9 +33,12 @@ public:
         dfsVisit(searchable->getInitialState(), searchable);
         cost = searchable->getGoalState()->getCost();
         sum = this->getLengthOfPath(searchable->getInitialState(), searchable->getGoalState());
+        if (cost == -1) {
+            return new SearcherSolution(-1, -1);
+        }
+        int develops = this->getDevelopStates(searchable->getAllStates());
         string direction = this->getDirection(searchable->getInitialState(), searchable->getGoalState());
-        //todo: check direction who no path
-        return new SearcherSolution(cost, sum, 0, direction);
+        return new SearcherSolution(cost, sum, develops, direction);
     }
 };
 

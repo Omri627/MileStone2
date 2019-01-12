@@ -46,12 +46,19 @@ public:
 
     static vector<string> readMatrix(istream &file) {
         vector<string> mat;
-        int size;
+        int size = 0;
         file >> size;
+        string line;
         for (int i = 0; i < size + 2 ; ++i) {
-            string line;
-            file >> line;
-            mat.push_back(line);
+             string line;
+             file >> line;
+             mat.push_back(line);
+            /*getline(file,line);
+            if (i > 0) {
+               line = line.substr(0, line.length()-1);
+               mat.push_back(line);
+           }*/
+
         }
 
         return mat;

@@ -89,8 +89,13 @@ protected:
         return getDirectionFromVector(directions);
     }
 
-    virtual string getDevelopStates() {
-
+    virtual int getDevelopStates(list<State<T>*> states) {
+        int develops = 0;
+        for (State<T>* state : states) {
+            if (state->getColor() == GRAY || state->getColor() == BLACK)
+                develops++;
+        }
+        return develops;
     }
 
 

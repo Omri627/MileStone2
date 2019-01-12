@@ -3,12 +3,15 @@
 SearcherSolution::SearcherSolution(int totalCost, int length) {
     this->totalCost = totalCost;
     this->length = length;
+    this->developStates = 0;
+    this->direction = "";
 }
 
 SearcherSolution::SearcherSolution(int totalCost, int length, int developStates) {
     this->totalCost = totalCost;
     this->length = length;
     this->developStates = developStates;
+    this->direction = "";
 }
 
 SearcherSolution::SearcherSolution(int totalCost, int length, int developStates, string direction) {

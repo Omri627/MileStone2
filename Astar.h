@@ -26,9 +26,10 @@ public:
             if (n == searchable->getGoalState()) {
                 double sum = this->getCostOfPath(initialState, n);
                 double length = this->getLengthOfPath(initialState, n);
+                int develops = this->getDevelopStates(searchable->getAllStates());
                 string direction = this->getDirection(initialState, n);
                 if (sum != -1 && length != -1) {
-                    return new SearcherSolution(sum, length, 0, direction);
+                    return new SearcherSolution(sum, length, develops, direction);
                 }
                 return new SearcherSolution(-1, -1);
             }
