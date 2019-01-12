@@ -37,7 +37,7 @@ public:
         int cost, length;
         this->initialize(searchable);
         this->bfsAlgorithm(searchable);
-        cost = searchable->getGoalState()->getCost();
+        cost = this->getCostOfPath(searchable->getInitialState(), searchable->getGoalState());
         length = this->getLengthOfPath(searchable->getInitialState(), searchable->getGoalState());
         if (cost == -1) {
             return new SearcherSolution(-1, -1);
