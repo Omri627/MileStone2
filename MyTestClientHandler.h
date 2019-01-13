@@ -57,8 +57,8 @@ public:
     }
 
     virtual ~MyTestClientHandler() {
-        delete this->solver;
-        delete this->cache;
+        if (this->cache != nullptr)
+            delete this->cache;
     }
 
 };
