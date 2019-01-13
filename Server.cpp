@@ -63,9 +63,9 @@ void Server::sendData(string data, Client* client) {
     msgToTransmit[strlen(msgToTransmit)] = '\r\n';
     cout << data << endl;
     /* Send message to the server */
-    pthread_mutex_lock(&global_mutex);
+    //pthread_mutex_lock(&global_mutex);
     byteTransmitted = write(client->getConnectionFd(), msgToTransmit, strlen(msgToTransmit));
-    pthread_mutex_unlock(&global_mutex);
+    //pthread_mutex_unlock(&global_mutex);
     if (byteTransmitted < 0) {
         perror("ERROR writing to socket");
         exit(1);

@@ -10,40 +10,10 @@
 #include "Bfs.h"
 #include "Astar.h"
 int main() {
-    /*ParallelServer* server = new ParallelServer(20);
+    ParallelServer* server = new ParallelServer(20);
     Searcher<int>* bfs = new Bfs<int>();
     SearcherSolver<int>* solver = new SearcherSolver<int>(bfs);
     MyTestClientHandler<int>* handler = new MyTestClientHandler<int>(solver);
     server->open(5400, handler);
-    */
-    string row1 = "2,3,0,0,0";
-    string row2 = "4,5,1,1,1";
-    string row3 = "0,0";
-    string row4 = "1,4";
-    vector<string> vector;
-    vector.push_back(row1);
-    vector.push_back(row2);
-    vector.push_back(row3);
-    vector.push_back(row4);
-    Astar<int>* astar = new Astar<int>();
-    SearcherSolution* searcherSolution = astar->search(new MazeGame<int>(vector));
-    cout << searcherSolution->getDirection() << endl;
-    //delete server;
+    delete server;
 }
-/*
- *     vector<string> data;
-    string row1 = "0,0";
-    string row2 = "2,2";
-    string row3 = "1,0,1";
-    string row4 = "1,0,1";
-    string row5 = "-1,0,1";
-    data.push_back(row1);
-    data.push_back(row2);
-    data.push_back(row3);
-    data.push_back(row4);
-    data.push_back(row5);
-    MazeGame<int>* mazeGame = new MazeGame<int>(data);
-    Dfs<int>* dfs = new Dfs<int>();
-    Solution* s = dfs->search(mazeGame);
-    cout << s->StringRepresentation() << endl;
- */

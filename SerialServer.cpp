@@ -59,14 +59,19 @@ void SerialServer::open(int port, ClientHandler* clientHandler) {
         }
         /* handle all client requests */
         client->setConnectionFd(this->clientFd);
-        client->setEnd(1);
+        try {
+            client->setEnd(clientHandler->handleClient(this, client));
+        } catch (const char* error) {
+            this->sendData(error, client);
+        }
+        /*client->setEnd(1);
         while (client->getEnd()) {
             try {
                 client->setEnd(clientHandler->handleClient(this, client));
             } catch (const char* error) {
                 this->sendData(error, client);
             }
-        }
+        } */
         /* close connection with client */
         this->closeClientConnection();
     }

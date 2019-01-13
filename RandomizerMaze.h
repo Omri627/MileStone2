@@ -4,6 +4,8 @@
 
 #include "MazeGame.h"
 #include <string>
+#include <random>
+
 using namespace std;
 class RandomizerMaze {
 private:

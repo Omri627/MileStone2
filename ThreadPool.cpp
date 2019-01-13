@@ -82,8 +82,10 @@ void ThreadPool::executeTask(task task) {
             struct timespec abstime;                      // timer object
             clock_gettime(CLOCK_REALTIME, &abstime);
             abstime.tv_sec += 10;
+            cout << "listennnnnnnnn" << endl;
             pthread_timedjoin_np(pthread, nullptr, &abstime);
             this->taskFinish(pthread);
+            cout << "timeout" << endl;
     }
     cout << this->workers.size() << endl;
 }
@@ -113,7 +115,7 @@ bool ThreadPool::isTaskActivated() {
  */
 void ThreadPool::waitForActivatedTasks() {
     //todo: discuss the actual time intervals
-    const int checkIntervals = 50;
+    const int checkIntervals = 20;
     while (isTaskActivated())
         sleep(checkIntervals);
 }

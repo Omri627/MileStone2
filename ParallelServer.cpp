@@ -47,7 +47,7 @@ int ParallelServer::listenToClient(Client* client) {
     int clientSizeStructure;
     // start listening for the clients,
     // the process be in sleep mode and will wait for the incoming connection
-    listen(serverFd, 5);
+    listen(serverFd, 10);
     if (serverFd == -1) {
         cout << "connection lost" << endl;
         return 0;
@@ -62,13 +62,13 @@ int ParallelServer::listenToClient(Client* client) {
     }
     client->setConnectionFd(connectionFd);
     cout << "request accepted"  << endl;
+    cout << client->getConnectionFd() << endl;
 }
 
 
 void ParallelServer::open(int port, ClientHandler *clientHandler) {
     ThreadPool::task listenTask, interactTask;
     listen_params listenParams, interactParams;
-    Client* client = new Client(port, clientHandler);
 
     /* create connection of server in given port */
     this->openPortConnection(port);
@@ -76,6 +76,7 @@ void ParallelServer::open(int port, ClientHandler *clientHandler) {
     /* listen and connect to client */
     /* connect and handle client */
     /* create thread to listen for possible clients requests */
+    Client* client = new Client(port, clientHandler);
     client->setConnectionFd(-1);
     listenParams.client = client;
     listenParams.server = this;
@@ -83,15 +84,20 @@ void ParallelServer::open(int port, ClientHandler *clientHandler) {
     listenTask.type = (firstClient)?ThreadPool::JOIN:ThreadPool::TIMEOUT;
     listenTask.operation = &ParallelServer::listenToClientHelper;
     this->threadPool->enqueueTask(listenTask);
-
+    sleep(1);
+    cout << "connect to client" << endl;
+    cout << client->getConnectionFd() << endl;
     /* close if timer is over */
     if (client->getConnectionFd() == -1) {
+        cout << "*" << endl;
+        threadPool->waitForActivatedTasks();
         cout << "time elapsed" << endl;
         this->stop();
         delete clientHandler;
         return;
     }
     /* connect and handle client */
+    cout << "handle client" << endl;
     interactParams.client = client;
     interactParams.server = this;
     interactTask.params = &listenParams;
@@ -104,7 +110,7 @@ void ParallelServer::open(int port, ClientHandler *clientHandler) {
 }
 
 void ParallelServer::stop() {
-    this->threadPool->waitForActivatedTasks();
+    //this->threadPool->waitForActivatedTasks();
     delete this->threadPool;
     this->serverFd.clear();
 }
@@ -119,16 +125,24 @@ void* ParallelServer::listenToClientHelper(void *params) {
 }
 void ParallelServer::interactWithClient(Client* client) {
     /* handle all client requests */
-    client->setEnd(1);
+    try {
+        client->getHandler()->handleClient(this,client);
+    } catch (const char* error) {
+        this->sendData(error, client);
+    }
+    this->closeClientConnection(client);
+    return;
+
+    /*client->setEnd(1);
     while (client->getEnd()) {
         try {
             client->setEnd(client->getHandler()->handleClient(this, client));
         } catch (const char *error) {
             this->sendData(error, client);
         }
-    }
+    } */
     /* close connection with client */
-    this->closeClientConnection(client);
+    //this->closeClientConnection(client);
 }
 void* ParallelServer::interactWithClientHelper(void *params) {
     listen_params* parameters = (listen_params*)params;

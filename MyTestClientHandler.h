@@ -34,13 +34,13 @@ public:
         MazeGame<T>* mazeGame;              // specific maze game problem
         SearcherSolution* solution;         // solution of maze problem
         string buffer;                      // data received by connected client
-        /* get number of lines in input */
-        buffer = server->readData(client);
-        if (buffer == END)
-            return 0;
-        if (!Utils::isNumber(buffer))
-            throw "data is invalid, try again";
-
+        cout << "reading data" << endl;
+        /* get data from client */
+        do {
+            buffer = server->readData(client);
+            data.push_back(buffer);
+        } while(buffer != END);
+        data.pop_back();
         mazeGame = new MazeGame<T>(data);
         /* get solution of this instance of problem */
         if (this->cache->isSolutionExist(mazeGame)) {
@@ -51,7 +51,7 @@ public:
             this->cache->storeSolution(mazeGame, solution);
         }
 
-        /* send solution to client */
+        /* se+nd solution to client */
         server->sendData(solution->StringRepresentation(), client);
         return 1;
     }
