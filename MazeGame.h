@@ -4,11 +4,11 @@
 #include <map>
 #include "State.h"
 #include "Searchable.h"
+#include "Utils.h"
 #include <vector>
 #include <sstream>
 #include <ostream>
 #include <istream>
-
 template <class T>
 class MazeGame : public Searchable<T> {
 private:
@@ -17,6 +17,7 @@ private:
     matrix statesMatrix;
     State<T> *initialState;
     State<T> *goalState;
+
     void initMatrix() {
         for (int i = 0; i < this->matrixSize; i++) {
             vector<State<T> *> rowVector;
@@ -26,12 +27,33 @@ private:
             this->statesMatrix.push_back(rowVector);
         }
     }
+    void fillWalls() {
+        int walls = this->matrixSize - this->statesMatrix[0].size();
+        int emptyLines = this->matrixSize - this->statesMatrix.size();
+        if (walls > 0) {
+            for (int i = 0; i < this->matrixSize; ++i) {
+                vector<State<T> *> *rowVector = &this->statesMatrix[i];
+                for (int j = 0; j < walls; ++j) {
+                    rowVector->push_back(new State<T>(-1, i, rowVector->size()));
+                }
+            }
+        }
+        else if (emptyLines > 0) {
+            for (int i = 0; i < emptyLines; i++) {
+                vector<State<T> *> rowVector;
+                for (int j = 0; j < this->matrixSize; j++) {
+                    rowVector.push_back(new State<T>(-1, statesMatrix.size(), j));
+                }
+                this->statesMatrix.push_back(rowVector);
+            }
+        }
 
+    }
     bool isValidData(vector<string> data) {
-        if (!isValidMatrixRow(data[0], 1) || !isValidMatrixRow(data[1], 1))
+        if (!isValidMatrixRow(data[data.size()-1], 1) || !isValidMatrixRow(data[data.size()-2], 1))
             return false;
-        for (int i = 2; i < data.size(); i++)
-            if (!isValidMatrixRow(data[i], 0))
+        for (int i = 0; i < data.size() - 2; i++)
+            if (!isValidMatrixRow(data[i], this->matrixSize - 1))
                 return false;
         return true;
     }
@@ -54,20 +76,26 @@ private:
         T weight;
         State<T> *state;
         char delimiter;
-        for (int i = 2, j = 0; i < data.size(); i++) {
+        //if (!this->isValidData(data))
+          //  throw "invalid data";
+        int elementsInRow = Utils::commansAmount(data[0]);
+        int dataSize = data.size() - 2;
+        this->matrixSize = max(elementsInRow, dataSize);
+        for (int i = 0, j = 0; i < data.size() - 2; i++) {
             string row = data.at(i);
             istringstream rowStream(row);
             j = 0;
             while (rowStream >> weight) {
-                state = new State<T>(weight, i - 2, j);
-                this->setState(i - 2, j, state);
+                state = new State<T>(weight, i, j);
+                this->setState(i, j, state);
                 rowStream >> delimiter;
                 j++;
             }
         }
-        buffer = data[0].c_str();
+        this->fillWalls();
+        buffer = data[data.size()-2].c_str();
         sscanf(buffer, "%d,%d", &initialPosition.row, &initialPosition.column);
-        buffer = data[1].c_str();
+        buffer = data[data.size()-1].c_str();
         sscanf(buffer, "%d,%d", &goalPosition.row, &goalPosition.column);
         this->initialState = getState(initialPosition);
         this->goalState = getState(goalPosition);

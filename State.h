@@ -142,12 +142,11 @@ public:
     bool operator>=(const State &rhs) const {
         return !(*this < rhs);
     }
-    //todo: it weird u compared between state values.
     bool operator==(const State &rhs) const {
-        return this->state == rhs.state;
+        return this->cost == rhs.cost;
     }
     bool operator!=(const State &rhs) const {
-        return this->state != rhs.state;
+        return this->cost != rhs.cost;
     }
 };
 

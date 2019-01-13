@@ -8,13 +8,26 @@
 #include "BestFirstSearch.h"
 #include "SearcherSolution.h"
 #include "Bfs.h"
+#include "Astar.h"
 int main() {
-    ParallelServer* server = new ParallelServer(20);
+    /*ParallelServer* server = new ParallelServer(20);
     Searcher<int>* bfs = new Bfs<int>();
     SearcherSolver<int>* solver = new SearcherSolver<int>(bfs);
     MyTestClientHandler<int>* handler = new MyTestClientHandler<int>(solver);
     server->open(5400, handler);
-    delete server;
+    */
+     string row1 = "2,3,4";
+    string row2 = "5,6,7";
+    string row3 = "0,0";
+    string row4 = "1,2";
+    vector<string> vector;
+    vector.push_back(row1);
+    vector.push_back(row2);
+    vector.push_back(row3);
+    vector.push_back(row4);
+    Astar<int>* astar = new Astar<int>();
+    SearcherSolution* searcherSolution = astar->search(new MazeGame<int>(vector));
+    //delete server;
 }
 /*
  *     vector<string> data;
