@@ -3,16 +3,16 @@
 #define PROJECT2_RANDOMIZEMAZE_H
 
 #include "MazeGame.h"
+#include <string>
 using namespace std;
 class RandomizerMaze {
 private:
     int size, start ,end;
-    std::default_random_engine generator;
 
-    string getRandomRow() {
+    std::string getRandomRow() {
         random_device rand_dev;
         mt19937 generator(rand_dev());
-        std::uniform_int_distribution<int> distribution(start,end);
+        uniform_int_distribution<int> distribution(start,end);
         string row = "";
         for (int i = 0; i < size - 1; ++i) {
 
@@ -36,7 +36,7 @@ public:
         matrix.push_back("0,0");
         string endPoint = to_string(size - 1);
         endPoint+= ",";
-        endPoint += to_string(size - 1);
+        endPoint += std::to_string(size - 1);
         matrix.push_back(endPoint);
         for (int i = 0; i < size ; ++i) {
             matrix.push_back(getRandomRow());

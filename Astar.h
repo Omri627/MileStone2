@@ -5,8 +5,6 @@
 #include "SearcherSolution.h"
 #include "PairPriorityQueue.h"
 
-using namespace std;
-
 template <class T>
 class Astar : public Searcher<T> {
 private:

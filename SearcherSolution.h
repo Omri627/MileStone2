@@ -1,9 +1,8 @@
 #ifndef PROJECT2_SEARCHERSOLUTION_H
 #define PROJECT2_SEARCHERSOLUTION_H
 
-#include <ostream>
 #include "Solution.h"
-
+using namespace std;
 class SearcherSolution : public Solution {
 private:
     int totalCost;

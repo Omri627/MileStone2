@@ -49,7 +49,6 @@ private:
         while (iterator != this->solutions.end()) {
             file << *iterator->first << "$" << endl << iterator->second;
             iterator++;
-            cout << "*";
         }
         file.close();
     }
@@ -78,7 +77,20 @@ public:
 
     virtual ~FileCacheManager() {
         this->saveData();
+        typename map<Problem, Solution, CmpMazeGame<Problem>>::iterator it;
+        for (it = this->solutions.begin(); it != this->solutions.end() ; it++) {
+            if (it->first != nullptr) {
+                delete it->first;
+                //it->first = nullptr;
+            }
+            if (it->second != nullptr) {
+                delete it->second;
+                //it->second = nullptr;
+            }
+        }
     }
+
+
 
 };
 #endif

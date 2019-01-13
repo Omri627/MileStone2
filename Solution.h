@@ -2,7 +2,9 @@
 #define PROJECT2_SOLUTION_H
 
 #include <string>
-using namespace std;
+#include <istream>
+#include <ostream>
+
 class Solution {
 public:
     /**
@@ -10,13 +12,13 @@ public:
      * which print out on screen and stored in file.
      * @return returns the textual representation of solution
      */
-    virtual string StringRepresentation() const = 0 ;
+    virtual std::string StringRepresentation() const = 0 ;
     /**
      * readSolution method gets input stream object and reads
      * the solution for it.
      * @param is input stream.
      */
-    virtual void readSolution(istream& is) = 0;
+    virtual void readSolution(std::istream& is) = 0;
     /**
      * make solution streamable
      * and provide a format for read the object from a text stream
@@ -24,7 +26,7 @@ public:
      * @param solution specific solution object
      * @return return input stream for chaining.
      */
-    friend istream &operator>>(istream &is, Solution * solution) {
+    friend std::istream &operator>>(std::istream &is, Solution * solution) {
         solution->readSolution(is);
         return is;
     }
@@ -35,8 +37,8 @@ public:
      * @param solution specific solution
      * @return returns output stream for chaining.
      */
-    friend ostream &operator<<(ostream &os, Solution const * solution) {
-        os << solution->StringRepresentation() << endl;
+    friend std::ostream &operator<<(std::ostream &os, Solution const * solution) {
+        os << solution->StringRepresentation() << std::endl;
         return os;
     }
 };

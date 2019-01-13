@@ -2,9 +2,12 @@
 #ifndef PROJECT2_SEARCHER_H
     #define PROJECT2_SEARCHER_H
 
+#include "Solution.h"
 #include "Searchable.h"
 #include "vector"
-#include "Solution.h"
+#include "State.h"
+#include "string"
+#include "SearcherSolution.h"
 
 #define RIGHT "Right"
 #define LEFT "Left"
