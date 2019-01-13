@@ -1,7 +1,18 @@
 #include "StringReverserSolver.h"
+/**
+ * solve method get specific instance of problem and solve it.
+ * i.e gets a string and causes this character sequence to be replaced by the reverse of the sequence.
+ * @param problem specific problem
+ * @return return reverse string of given parameter.
+ */
 string StringReverserSolver::solve(string problem) {
     return this->reverseString(problem);
 }
+/**
+ * reverseString method causes this character sequence to be replaced by the reverse of the sequence.
+ * @param str specific string.
+ * @return reversed content of given string
+ */
 string StringReverserSolver::reverseString(string str) {
         int n = str.length();
 
@@ -13,7 +24,9 @@ string StringReverserSolver::reverseString(string str) {
 
         return str;
 }
-
+/**
+ * free, used to deallocate memory
+ */
 StringReverserSolver::~StringReverserSolver() {
 
 }

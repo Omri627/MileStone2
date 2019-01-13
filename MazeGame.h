@@ -17,7 +17,6 @@ private:
     matrix statesMatrix;
     State<T> *initialState;
     State<T> *goalState;
-
     void initMatrix() {
         for (int i = 0; i < this->matrixSize; i++) {
             vector<State<T> *> rowVector;
@@ -185,6 +184,8 @@ public:
     void setState(int row, int column, State<T> *state) {
         this->statesMatrix[row][column] = state;
     }
+    /* operator >, >=, <, <= , ==, != used to compare between maze game objects.
+ * aid map to order the problems and identify that two mazeGame problems are equal*/
     bool operator==(const MazeGame<T> &rhs) const {
         if (this->matrixSize != rhs.matrixSize)
             return false;
