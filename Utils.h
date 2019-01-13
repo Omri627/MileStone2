@@ -34,6 +34,9 @@ public:
      * at any other case returns false
      */
     static bool isNumber(string str);
+
+    static int commansAmount(string str);
+
 };
 
 

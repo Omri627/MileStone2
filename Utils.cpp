@@ -46,3 +46,11 @@ bool Utils::isNumber(string str) {
             return false;
     return true;
 }
+int Utils::commansAmount(string str) {
+    int commas = 0;
+    for (int i = 0; i < str.length(); i++) {
+        if (str[i] == ',')
+            commas++;
+    }
+    return commas;
+}
