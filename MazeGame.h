@@ -18,87 +18,6 @@ private:
     State<T> *initialState;
     State<T> *goalState;
 
-    void initMatrix(int row, int column) {
-        for (int i = 0; i < row; i++) {
-            vector<State<T> *> rowVector;
-            for (int j = 0; j < column; j++) {
-                rowVector.push_back(nullptr);
-            }
-            this->statesMatrix.push_back(rowVector);
-        }
-    }
-    void fillWalls() {
-        int walls = this->matrixSize - this->statesMatrix[0].size();
-        int emptyLines = this->matrixSize - this->statesMatrix.size();
-        if (walls > 0) {
-            for (int i = 0; i < this->matrixSize; ++i) {
-                vector<State<T> *> *rowVector = &this->statesMatrix[i];
-                for (int j = 0; j < walls; ++j) {
-                    rowVector->push_back(new State<T>(-1, i, rowVector->size()));
-                }
-            }
-        }
-        else if (emptyLines > 0) {
-            for (int i = 0; i < emptyLines; i++) {
-                vector<State<T> *> rowVector;
-                for (int j = 0; j < this->matrixSize; j++) {
-                    rowVector.push_back(new State<T>(-1, statesMatrix.size(), j));
-                }
-                this->statesMatrix.push_back(rowVector);
-            }
-        }
-
-    }
-    bool isValidData(vector<string> data) {
-        if (!isValidMatrixRow(data[data.size()-1], 1) || !isValidMatrixRow(data[data.size()-2], 1))
-            return false;
-        for (int i = 0; i < data.size() - 2; i++)
-            if (!isValidMatrixRow(data[i], this->matrixSize - 1))
-                return false;
-        return true;
-    }
-
-    static bool isValidMatrixRow(string row, int elements) {
-        unsigned long commas = 0;
-        for (int i = 0; i < row.size(); i++) {
-            if (row[i] == ',')
-                commas++;
-            if ((row[i] < '0' || row[i] > '9') && row[i] != '.' && row[i] != ',')
-                return false;
-        }
-        return (commas == elements)?true : false;
-    }
-
-    MazeGame<T> *createMazeFromData(vector<string> data) {
-        position initialPosition;
-        position goalPosition;
-        const char *buffer;
-        T weight;
-        State<T> *state;
-        char delimiter;
-        //if (!this->isValidData(data))
-          //  throw "invalid data";
-        for (int i = 0, j = 0; i < data.size() - 2; i++) {
-            string row = data.at(i);
-            istringstream rowStream(row);
-            j = 0;
-            while (rowStream >> weight) {
-                state = new State<T>(weight, i, j);
-                this->setState(i, j, state);
-                rowStream >> delimiter;
-                j++;
-            }
-        }
-        this->fillWalls();
-        buffer = data[data.size()-2].c_str();
-        sscanf(buffer, "%d,%d", &initialPosition.row, &initialPosition.column);
-        buffer = data[data.size()-1].c_str();
-        sscanf(buffer, "%d,%d", &goalPosition.row, &goalPosition.column);
-        this->initialState = getState(initialPosition);
-        this->goalState = getState(goalPosition);
-    }
-
-
 public:
     MazeGame(matrix states, State<T> *initialState, State<T> *goalState, unsigned long matrixSize) {
         this->statesMatrix = states;
@@ -279,8 +198,6 @@ public:
     template <class U>
     friend ostream& operator<<(ostream &os, const MazeGame<U> &game) {
         os << game.matrixSize << endl;
-        os << game.getInitialState()->getRow() << "," << game.getInitialState()->getColumn() << endl;
-        os << game.getGoalState()->getRow() << "," << game.getGoalState()->getColumn() << endl;
         for (int i = 0; i < game.matrixSize; i++) {
             vector<State<T>*> row = game.statesMatrix[i];
             for (int j = 0; j < game.matrixSize - 1; j++) {
@@ -288,6 +205,8 @@ public:
             }
             os <<  ((State<T>*)row.at(game.matrixSize-1))->getState() << endl;
         }
+        os << game.getInitialState()->getRow() << "," << game.getInitialState()->getColumn() << endl;
+        os << game.getGoalState()->getRow() << "," << game.getGoalState()->getColumn() << endl;
         return os;
     }
     template <class U>
@@ -313,18 +232,87 @@ public:
         return is;
     }
 
-    virtual ~MazeGame() {
-        for (int i = 0; i < matrixSize ; ++i) {
-            for (int j = 0; j < matrixSize; ++j) {
-                if(statesMatrix[i][j] != nullptr) {
-                    delete statesMatrix[i][j];
-                    statesMatrix[i][j] = nullptr;
-                }
-
+private:
+    void initMatrix(int row, int column) {
+        for (int i = 0; i < row; i++) {
+            vector<State<T> *> rowVector;
+            for (int j = 0; j < column; j++) {
+                rowVector.push_back(nullptr);
             }
-
+            this->statesMatrix.push_back(rowVector);
         }
     }
+    void fillWalls() {
+        int walls = this->matrixSize - this->statesMatrix[0].size();
+        int emptyLines = this->matrixSize - this->statesMatrix.size();
+        if (walls > 0) {
+            for (int i = 0; i < this->matrixSize; ++i) {
+                vector<State<T> *> *rowVector = &this->statesMatrix[i];
+                for (int j = 0; j < walls; ++j) {
+                    rowVector->push_back(new State<T>(-1, i, rowVector->size()));
+                }
+            }
+        }
+        else if (emptyLines > 0) {
+            for (int i = 0; i < emptyLines; i++) {
+                vector<State<T> *> rowVector;
+                for (int j = 0; j < this->matrixSize; j++) {
+                    rowVector.push_back(new State<T>(-1, statesMatrix.size(), j));
+                }
+                this->statesMatrix.push_back(rowVector);
+            }
+        }
+
+    }
+    bool isValidData(vector<string> data) {
+        if (!isValidMatrixRow(data[data.size()-1], 1) || !isValidMatrixRow(data[data.size()-2], 1))
+            return false;
+        for (int i = 0; i < data.size() - 2; i++)
+            if (!isValidMatrixRow(data[i], this->matrixSize - 1))
+                return false;
+        return true;
+    }
+
+    static bool isValidMatrixRow(string row, int elements) {
+        unsigned long commas = 0;
+        for (int i = 0; i < row.size(); i++) {
+            if (row[i] == ',')
+                commas++;
+            if ((row[i] < '0' || row[i] > '9') && row[i] != '.' && row[i] != ',')
+                return false;
+        }
+        return (commas == elements)?true : false;
+    }
+
+    MazeGame<T> *createMazeFromData(vector<string> data) {
+        position initialPosition;
+        position goalPosition;
+        const char *buffer;
+        T weight;
+        State<T> *state;
+        char delimiter;
+        if (!this->isValidData(data))
+            throw "invalid data";
+        for (int i = 0, j = 0; i < data.size() - 2; i++) {
+            string row = data.at(i);
+            istringstream rowStream(row);
+            j = 0;
+            while (rowStream >> weight) {
+                state = new State<T>(weight, i, j);
+                this->setState(i, j, state);
+                rowStream >> delimiter;
+                j++;
+            }
+        }
+        this->fillWalls();
+        buffer = data[data.size()-2].c_str();
+        sscanf(buffer, "%d,%d", &initialPosition.row, &initialPosition.column);
+        buffer = data[data.size()-1].c_str();
+        sscanf(buffer, "%d,%d", &goalPosition.row, &goalPosition.column);
+        this->initialState = getState(initialPosition);
+        this->goalState = getState(goalPosition);
+    }
+
 };
 
 
