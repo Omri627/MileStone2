@@ -313,6 +313,7 @@ private:
         this->goalState = getState(goalPosition);
     }
 
+public:
     virtual ~MazeGame() {
         for (int i = 0; i < matrixSize ; ++i) {
             for (int j = 0; j < matrixSize; ++j) {
