@@ -18,10 +18,10 @@ private:
     State<T> *initialState;
     State<T> *goalState;
 
-    void initMatrix() {
-        for (int i = 0; i < this->matrixSize; i++) {
+    void initMatrix(int row, int column) {
+        for (int i = 0; i < row; i++) {
             vector<State<T> *> rowVector;
-            for (int j = 0; j < this->matrixSize; j++) {
+            for (int j = 0; j < column; j++) {
                 rowVector.push_back(nullptr);
             }
             this->statesMatrix.push_back(rowVector);
@@ -78,9 +78,6 @@ private:
         char delimiter;
         //if (!this->isValidData(data))
           //  throw "invalid data";
-        int elementsInRow = Utils::commansAmount(data[0]);
-        int dataSize = data.size() - 2;
-        this->matrixSize = max(elementsInRow, dataSize);
         for (int i = 0, j = 0; i < data.size() - 2; i++) {
             string row = data.at(i);
             istringstream rowStream(row);
@@ -118,14 +115,16 @@ public:
     }
 
     MazeGame(vector<string> data) {
-        this->matrixSize = data.size() - 2;
-        this->initMatrix();
+        int elementsInRow = Utils::commansAmount(data[0]) + 1;
+        int dataSize = data.size() - 2;
+        this->matrixSize = max(elementsInRow, dataSize);
+        this->initMatrix(dataSize, elementsInRow);
         this->createMazeFromData(data);
     }
 
     MazeGame(MazeGame<T>& mazeGame) {
         this->matrixSize = mazeGame.matrixSize;
-        this->initMatrix();
+        this->initMatrix(mazeGame.matrixSize, mazeGame.matrixSize);
         for (int i = 0; i < matrixSize; i++) {
             for (int j = 0; j < matrixSize; j++) {
                 this->statesMatrix[i][j] = new State<T>(mazeGame.getState(i,j)->getState(), i,j);

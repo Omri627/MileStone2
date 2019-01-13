@@ -16,10 +16,10 @@ int main() {
     MyTestClientHandler<int>* handler = new MyTestClientHandler<int>(solver);
     server->open(5400, handler);
     */
-     string row1 = "2,3,4";
-    string row2 = "5,6,7";
+    string row1 = "2,3,0,0,0";
+    string row2 = "4,5,1,1,1";
     string row3 = "0,0";
-    string row4 = "1,2";
+    string row4 = "1,4";
     vector<string> vector;
     vector.push_back(row1);
     vector.push_back(row2);
@@ -27,6 +27,7 @@ int main() {
     vector.push_back(row4);
     Astar<int>* astar = new Astar<int>();
     SearcherSolution* searcherSolution = astar->search(new MazeGame<int>(vector));
+    cout << searcherSolution->getDirection() << endl;
     //delete server;
 }
 /*
