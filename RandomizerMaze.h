@@ -49,7 +49,16 @@ public:
         int size = 0;
         file >> size;
         string line;
+        string start,end;
         for (int i = 0; i < size + 2 ; ++i) {
+            if (i == 0) {
+                file >> start;
+                continue;
+            }
+            if  (i == 1) {
+                file >> end;
+                continue;
+            }
              string line;
              file >> line;
              mat.push_back(line);
@@ -60,7 +69,8 @@ public:
            }*/
 
         }
-
+        mat.push_back(start);
+        mat.push_back(end);
         return mat;
     }
 

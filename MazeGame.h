@@ -313,6 +313,18 @@ public:
         return is;
     }
 
+    virtual ~MazeGame() {
+        for (int i = 0; i < matrixSize ; ++i) {
+            for (int j = 0; j < matrixSize; ++j) {
+                if(statesMatrix[i][j] != nullptr) {
+                    delete statesMatrix[i][j];
+                    statesMatrix[i][j] = nullptr;
+                }
+
+            }
+
+        }
+    }
 };
 
 
