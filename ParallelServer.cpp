@@ -139,4 +139,7 @@ void* ParallelServer::interactWithClientHelper(void *params) {
     parameters->server->interactWithClient(parameters->client);
     return nullptr;
 }
-
+ParallelServer::~ParallelServer() {
+    delete this->threadPool;
+    this->serverFd.clear();
+}
