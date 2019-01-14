@@ -81,11 +81,9 @@ public:
         for (it = this->solutions.begin(); it != this->solutions.end() ; it++) {
             if (it->first != nullptr) {
                 delete it->first;
-                //it->first = nullptr;
             }
             if (it->second != nullptr) {
                 delete it->second;
-                //it->second = nullptr;
             }
         }
     }

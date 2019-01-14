@@ -22,10 +22,10 @@ private:
     map<int, int > serverFd;
     bool firstClient;
     ThreadPool* threadPool;
+    bool isRunning;
 
     bool isConnectedPort(int port);
 
-    int getFd(int port);
 
     void openPortConnection(int port);
 
@@ -35,6 +35,9 @@ private:
 
     static void* interactWithClientHelper(void * params);
 public:
+    //todo: make private
+    int getFd(int port);
+
     ParallelServer(unsigned long threads);
 
     virtual void interactWithClient(Client* client);

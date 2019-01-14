@@ -34,7 +34,6 @@ public:
         MazeGame<T>* mazeGame;              // specific maze game problem
         SearcherSolution* solution;         // solution of maze problem
         string buffer;                      // data received by connected client
-        cout << "reading data" << endl;
         /* get data from client */
         do {
             buffer = server->readData(client);
@@ -51,7 +50,7 @@ public:
             this->cache->storeSolution(mazeGame, solution);
         }
 
-        /* se+nd solution to client */
+        /* send solution to client */
         server->sendData(solution->StringRepresentation(), client);
         return 1;
     }

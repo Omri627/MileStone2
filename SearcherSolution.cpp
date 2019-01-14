@@ -28,10 +28,13 @@ int SearcherSolution::getTotalCost() const {
 int SearcherSolution::getLength() const {
     return this->length;
 }
-string SearcherSolution::StringRepresentation() const {
-    return to_string(this->totalCost) + " " + to_string(this->length);
+string SearcherSolution::fileRepresentation() const {
+    return to_string(this->totalCost) + " " + to_string(this->length) + " " + to_string(this->developStates) + "\n" +
+    this->direction;
 }
-
+string SearcherSolution::StringRepresentation() const {
+    return this->direction;
+}
 void SearcherSolution::setTotalCost(int totalCost) {
     this->totalCost = totalCost;
 }
@@ -40,22 +43,22 @@ void SearcherSolution::setLength(int length) {
     this->length = length;
 }
 
-/*ostream &operator<<(ostream &os, SearcherSolution const*solution) {
-    os << solution->StringRepresentation() << endl;
+ostream &operator<<(ostream &os, SearcherSolution *solution) {
+    os << solution->fileRepresentation() << endl;
     return os;
-}*/
+}
 istream &operator>>(istream &is, SearcherSolution **solution) {
     string buffer;                  // solution representation
-    int cost, length;               // cost, length fields of solution
-
+    int cost, length, develope;               // cost, length fields of solution
+    char delimiter;
     /* read solution from stream and process his data */
-    is >> buffer;
-    cost = stoi(buffer);
-    is >> buffer;
-    length = stoi(buffer);
+    getline(is, buffer);
+    getline(is, buffer);
+    sscanf(buffer.c_str(), "%d %d %d", &cost, &length, &develope);
+    getline(is, buffer);
 
     /* set data of solution object */
-    *solution = new SearcherSolution(cost, length);
+    *solution = new SearcherSolution(cost, length, develope, buffer);
 }
 
 void SearcherSolution::readSolution(istream &is) {
@@ -67,7 +70,7 @@ int SearcherSolution::getDevelopStates() const {
 }
 
 void SearcherSolution::setDevelopStates(int developStates) {
-    SearcherSolution::developStates = developStates;
+    this->developStates = developStates;
 }
 
 const string &SearcherSolution::getDirection() const {
@@ -75,7 +78,7 @@ const string &SearcherSolution::getDirection() const {
 }
 
 void SearcherSolution::setDirection(const string &direction) {
-    SearcherSolution::direction = direction;
+    this->direction = direction;
 }
 
 

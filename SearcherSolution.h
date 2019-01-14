@@ -34,11 +34,15 @@ public:
 
     virtual string StringRepresentation() const;
 
+    virtual string fileRepresentation() const;
+
     virtual void readSolution(istream& is);
 
     //friend ostream &operator<<(ostream &os, SearcherSolution const*solution);
 
     friend istream &operator>>(istream &is, SearcherSolution **solution);
+
+    friend ostream &operator<<(ostream &os, SearcherSolution *solution);
 
 };
 

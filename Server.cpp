@@ -40,11 +40,12 @@ string Server::readData(Client* client) {
     //pthread_mutex_lock(&global_mutex);
     const int bufferSize = 512;
     int bytesReaded;
-    char buffer[bufferSize];
+    char * buffer = (char*)malloc(bufferSize);
+    //char buffer[bufferSize];
     bzero(buffer,bufferSize);                      // set buffer with null values
     //todo: flush
     cout << "";
-    bytesReaded = read(client->getConnectionFd(), buffer, bufferSize-1);
+    bytesReaded = read(client->getConnectionFd(), buffer, bufferSize);
     if (bytesReaded < 0) {
         perror("ERROR reading from socket");
         exit(1);
@@ -58,14 +59,14 @@ void Server::sendData(string data, Client* client) {
     int byteTransmitted;
     /* convert string data into array of characters to transmit */
     const char * charactersData = data.c_str();
-    char * msgToTransmit = (char*)malloc(sizeof(charactersData) + 2);
+    char * msgToTransmit = (char*)malloc(512);
     strcpy(msgToTransmit, charactersData);
-    msgToTransmit[strlen(msgToTransmit)] = '\r\n';
-    cout << data << endl;
+    msgToTransmit[strlen(msgToTransmit)] = '\r';
+    msgToTransmit[strlen(msgToTransmit)] = '\n';
     /* Send message to the server */
-    //pthread_mutex_lock(&global_mutex);
+    pthread_mutex_lock(&global_mutex);
     byteTransmitted = write(client->getConnectionFd(), msgToTransmit, strlen(msgToTransmit));
-    //pthread_mutex_unlock(&global_mutex);
+    pthread_mutex_unlock(&global_mutex);
     if (byteTransmitted < 0) {
         perror("ERROR writing to socket");
         exit(1);

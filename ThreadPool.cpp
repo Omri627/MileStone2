@@ -70,7 +70,6 @@ void ThreadPool::executeTask(task task) {
     pthread_t pthread;
     pthread_create(&pthread, nullptr, task.operation, task.params);
     this->workers.push_back(pthread);
-    cout << this->workers.size() << endl;
     switch (task.type) {
         case DETACH: pthread_detach(pthread);
             break;
@@ -82,12 +81,9 @@ void ThreadPool::executeTask(task task) {
             struct timespec abstime;                      // timer object
             clock_gettime(CLOCK_REALTIME, &abstime);
             abstime.tv_sec += 10;
-            cout << "listennnnnnnnn" << endl;
             pthread_timedjoin_np(pthread, nullptr, &abstime);
             this->taskFinish(pthread);
-            cout << "timeout" << endl;
     }
-    cout << this->workers.size() << endl;
 }
 /**
  * taskFinish method called whenever a pthread finished his task.
@@ -105,7 +101,6 @@ void ThreadPool::taskFinish(pthread_t pthread) {
  * @return returns true if and only if there is activated task.
  */
 bool ThreadPool::isTaskActivated() {
-    cout << "tasks: " << this->workers.size() << endl;
     if (this->workers.size() > 0)
         return true;
     return false;

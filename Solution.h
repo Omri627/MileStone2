@@ -26,6 +26,8 @@ public:
      * @param solution specific solution object
      * @return return input stream for chaining.
      */
+     virtual std::string fileRepresentation() const = 0;
+
     friend std::istream &operator>>(std::istream &is, Solution * solution) {
         solution->readSolution(is);
         return is;

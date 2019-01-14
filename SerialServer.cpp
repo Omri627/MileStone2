@@ -13,7 +13,7 @@ int SerialServer::listenToClient() {
     int clientSizeStructure;
     // start listening for the clients,
     // the process be in sleep mode and will wait for the incoming connection
-    listen(socketFd, 5);
+    listen(socketFd, SOMAXCONN);
     if (this->socketFd == -1) {
         cout << "connection lost" << endl;
         return 0;
