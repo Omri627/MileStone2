@@ -11,6 +11,11 @@ private:
     PairPriorityQueue<State<T>*,double> priorityQueue;
 
 public:
+    /**
+     * return best path on graph with a* algorithm
+     * @param searchable
+     * @return
+     */
     virtual SearcherSolution *search(Searchable<T> *searchable) {
         State<T>* initialState = searchable->getInitialState();
         double oldPath = -1;
@@ -59,12 +64,21 @@ public:
     }
 
 private:
+    /**
+     * thefunction is the the arieal distance between two state
+     * @param start state
+     * @param end state
+     * @return the distance
+     */
     double getManhDist(State<T>* start, State<T>* end) {
         int x = abs(start->getRow() - end->getRow());
         int y = abs(start->getColumn() - end->getColumn());
         return sqrt(x+y);
     }
-
+    /**
+     * remove amd emplace states from the queue
+     * @param pair of state and double
+     */
     void removeAndEmplace(pair<State<T>*,double> pair) {
         priorityQueue.remove(pair);
         priorityQueue.emplace(pair);

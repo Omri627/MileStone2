@@ -274,14 +274,16 @@ private:
     }
 
     static bool isValidMatrixRow(string row, int elements) {
-        unsigned long commas = 0;
-        for (int i = 0; i < row.size(); i++) {
-            if (row[i] == ',')
+        stringstream ss(row);
+        int num;
+        int commas = 0;
+        while (ss >> num) {
+            if (ss.peek() == ',') {
+                ss.ignore();
                 commas++;
-            if ((row[i] < '0' || row[i] > '9') && row[i] != '.' && row[i] != ',')
-                return false;
+            }
         }
-        return (commas == elements)?true : false;
+        return (commas == elements);
     }
 
     MazeGame<T> *createMazeFromData(vector<string> data) {
