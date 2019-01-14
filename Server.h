@@ -64,6 +64,8 @@ public:
      * stop server connection.
      */
     virtual void stop() = 0;
+
+    virtual ~Server();
 };
 
 #endif

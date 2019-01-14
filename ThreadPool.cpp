@@ -110,7 +110,7 @@ bool ThreadPool::isTaskActivated() {
  */
 void ThreadPool::waitForActivatedTasks() {
     //todo: discuss the actual time intervals
-    const int checkIntervals = 20;
+    const int checkIntervals = 10;
     while (isTaskActivated())
         sleep(checkIntervals);
 }

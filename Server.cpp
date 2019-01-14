@@ -39,7 +39,7 @@ string Server::readData(Client* client) {
     //pthread_mutex_lock(&global_mutex);
     const int bufferSize = 512;
     int bytesReaded;
-    char * buffer = (char*)malloc(bufferSize);
+    char * buffer = (char*)calloc(bufferSize,1);
     //char buffer[bufferSize];
     bzero(buffer,bufferSize);                      // set buffer with null values
     //todo: flush
@@ -60,7 +60,7 @@ void Server::sendData(string data, Client* client) {
     int byteTransmitted;
     /* convert string data into array of characters to transmit */
     const char * charactersData = data.c_str();
-    char * msgToTransmit = (char*)malloc(512);
+    char * msgToTransmit = (char*)calloc(512,1);
     strcpy(msgToTransmit, charactersData);
     msgToTransmit[strlen(msgToTransmit)] = '\r';
     msgToTransmit[strlen(msgToTransmit)] = '\n';
@@ -72,5 +72,10 @@ void Server::sendData(string data, Client* client) {
         perror("ERROR writing to socket");
         exit(1);
     }
+    cout <<msgToTransmit << endl;
     free(msgToTransmit);
+}
+
+Server::~Server() {
+    pthread_mutex_destroy(&global_mutex);
 }
