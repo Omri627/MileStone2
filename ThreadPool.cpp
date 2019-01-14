@@ -109,7 +109,7 @@ bool ThreadPool::isTaskActivated() {
  * wait for activated tasks in application and resume after their termination
  */
 void ThreadPool::waitForActivatedTasks() {
-    //todo: discuss the actual time intervals
+
     const int checkIntervals = 10;
     while (isTaskActivated())
         sleep(checkIntervals);
