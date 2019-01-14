@@ -89,6 +89,7 @@ public:
             if (it->second != nullptr) {
                 delete it->second;
             }
+            this->solutions.erase(it);
         }
     }
 
