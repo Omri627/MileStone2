@@ -64,7 +64,9 @@ public:
      * stop server connection.
      */
     virtual void stop() = 0;
-
+    /**
+     * destructor, used to free/disallocate memory
+     */
     virtual ~Server();
 };
 

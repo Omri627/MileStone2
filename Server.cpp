@@ -75,7 +75,9 @@ void Server::sendData(string data, Client* client) {
     cout <<msgToTransmit << endl;
     free(msgToTransmit);
 }
-
+/**
+* destructor, used to free/disallocate memory
+*/
 Server::~Server() {
     pthread_mutex_destroy(&global_mutex);
 }

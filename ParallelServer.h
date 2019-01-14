@@ -47,6 +47,8 @@ public:
     virtual void stop();
 
     virtual void closeClientConnection(Client* client);
+
+    virtual ~ParallelServer();
 };
 
 

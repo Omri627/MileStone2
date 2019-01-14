@@ -39,6 +39,7 @@ void ParallelServer::openPortConnection(int port) {
     task.type = ThreadPool::JOIN;
     this->threadPool->enqueueTask(task);
     this->serverFd[port] = *createParams.socketFd;
+    free(createParams.socketFd);
 }
 
 int ParallelServer::listenToClient(Client* client) {
@@ -113,8 +114,6 @@ void ParallelServer::stop() {
     threadPool->waitForActivatedTasks();
     for (pair<int, int> portFd : this->serverFd)
         close(portFd.second);
-    delete this->threadPool;
-    this->serverFd.clear();
 }
 void ParallelServer::closeClientConnection(Client* client) {
     delete client;
