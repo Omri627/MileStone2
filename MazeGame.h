@@ -12,6 +12,7 @@
 template <class T>
 class MazeGame : public Searchable<T> {
 private:
+    /* matrix table */
     typedef vector<vector<State<T> *>> matrix;
     unsigned long matrixSize;
     matrix statesMatrix;
