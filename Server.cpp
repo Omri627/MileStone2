@@ -52,7 +52,9 @@ string Server::readData(Client* client) {
     }
     //pthread_mutex_unlock(&global_mutex);
     buffer[bytesReaded-2] = 0;
-    return buffer;
+    string data = buffer;
+    free(buffer);
+    return data;
 }
 
 void Server::sendData(string data, Client* client) {
@@ -71,4 +73,5 @@ void Server::sendData(string data, Client* client) {
         perror("ERROR writing to socket");
         exit(1);
     }
+    free(msgToTransmit);
 }

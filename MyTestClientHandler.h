@@ -45,6 +45,7 @@ public:
         if (this->cache->isSolutionExist(mazeGame)) {
             cout << "cache" << endl;
             solution = this->cache->getSolution(mazeGame);
+            delete mazeGame;
         } else {
             solution = this->solver->solve(mazeGame);
             this->cache->storeSolution(mazeGame, solution);
