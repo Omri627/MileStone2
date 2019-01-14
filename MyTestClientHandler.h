@@ -43,7 +43,6 @@ public:
         mazeGame = new MazeGame<T>(data);
         /* get solution of this instance of problem */
         if (this->cache->isSolutionExist(mazeGame)) {
-            cout << "cache" << endl;
             solution = this->cache->getSolution(mazeGame);
             delete mazeGame;
         } else {

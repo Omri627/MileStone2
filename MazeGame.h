@@ -129,6 +129,8 @@ public:
     }
 
     void setState(int row, int column, State<T> *state) {
+        if (!this->statesMatrix[row][column])
+            delete(this->statesMatrix[row][column]);
         this->statesMatrix[row][column] = state;
     }
     /* operator >, >=, <, <= , ==, != used to compare between maze game objects.
@@ -325,10 +327,10 @@ public:
                     delete statesMatrix[i][j];
                     statesMatrix[i][j] = nullptr;
                 }
-
             }
 
         }
+        this->statesMatrix.clear();
     }
 };
 

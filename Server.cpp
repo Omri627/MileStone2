@@ -40,7 +40,6 @@ string Server::readData(Client* client) {
     const int bufferSize = 512;
     int bytesReaded;
     char * buffer = (char*)calloc(bufferSize,1);
-    //char buffer[bufferSize];
     bzero(buffer,bufferSize);                      // set buffer with null values
     //todo: flush
     cout << "";
