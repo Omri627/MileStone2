@@ -41,6 +41,7 @@ private:
             this->storeSolution(problem, solution);
         }
         pthread_mutex_unlock(&global_mutex);
+        file.close();
 
     }
 
