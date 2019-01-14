@@ -265,10 +265,11 @@ private:
 
     }
     bool isValidData(vector<string> data) {
+        int elementsInRow = Utils::commansAmount(data[0]);
         if (!isValidMatrixRow(data[data.size()-1], 1) || !isValidMatrixRow(data[data.size()-2], 1))
             return false;
         for (int i = 0; i < data.size() - 2; i++)
-            if (!isValidMatrixRow(data[i], this->matrixSize - 1))
+            if (!isValidMatrixRow(data[i], elementsInRow))
                 return false;
         return true;
     }
