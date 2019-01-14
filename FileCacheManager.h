@@ -57,7 +57,6 @@ private:
         pthread_mutex_unlock(&global_mutex);
         file.close();
     }
-
 public:
     FileCacheManager(string fileUrl) {
         this->fileUrl = fileUrl;
