@@ -12,13 +12,12 @@
 #include <string>
 
 #define END "end"
+extern pthread_mutex_t global_mutex;
 using namespace std;
 class Server {
 public:
     /* mutex object used to lock and unlock chunk of code  */
-    pthread_mutex_t global_mutex;
     //@ todo add mutex for read and write to chache.
-
     /* parameters for create server method */
     struct create_params {
         Server* server;

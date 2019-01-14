@@ -1,6 +1,5 @@
 #include <string.h>
 #include "Server.h"
-
 int Server::createPortConnection(int port) {
     struct sockaddr_in server_address;       // socket structure
     int socketFd;

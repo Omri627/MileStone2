@@ -5,6 +5,7 @@
 #include <fstream>
 #include "CmpMazeGame.h"
 #include "CacheManager.h"
+pthread_mutex_t global_mutex;
 using namespace std;
 
 template <class Problem, class Solution>
@@ -32,13 +33,15 @@ private:
         file.open(this->fileUrl);
         if (!file)
             return;
-
+        pthread_mutex_lock(&global_mutex);
         /* load instances of problem one by one and store in cache object */
         while (file >> &problem) {
             file >> delimiter;          // ignore delimiter between problem and solution
             file >> &solution;           // load solution for problem
             this->storeSolution(problem, solution);
         }
+        pthread_mutex_unlock(&global_mutex);
+
     }
 
     void saveData() {
@@ -46,10 +49,12 @@ private:
         file.open(this->fileUrl);
         typename map < Problem, Solution, CmpMazeGame<Problem> >::iterator iterator;
         iterator = this->solutions.begin();
+        pthread_mutex_lock(&global_mutex);
         while (iterator != this->solutions.end()) {
             file << *iterator->first << "$" << endl << iterator->second;
             iterator++;
         }
+        pthread_mutex_unlock(&global_mutex);
         file.close();
     }
 
