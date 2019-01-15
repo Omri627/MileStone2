@@ -18,6 +18,7 @@ using namespace std;
 template <class T>
 class Searcher {
 private:
+    //todo: write documantation
     string checkDirection(State<T>* prev, State<T>* curr) {
         string dir;
         if (curr->getRow() < prev->getRow()) {
@@ -31,7 +32,7 @@ private:
         }
         return dir;
     }
-
+    // todo : write documantation
     string getDirectionFromVector(vector<string> vec) {
         string res;
         for (std::vector<string>::iterator it = vec.begin(); it != vec.end(); ++it ) {
@@ -45,6 +46,12 @@ private:
 
 
 protected:
+    /**
+     * relax method correct the cost of destination state when found lower-cost route.
+     * the idea is to repeatedly improve estimates	toward	goal
+     * @param from source node
+     * @param to destionation node
+     */
     void relax(State<T>* from, State<T> * to) {
         if (to->getCost() > from->getCost() + to->getState() || to->getCost() == -1) {
             to->setCost(from->getCost() + to->getState());
@@ -64,7 +71,13 @@ protected:
         }
         return sum;
     }
-
+    /**
+     * compute the length of shortest path from start node to end node
+     * using the computations of searcher algorith.
+     * @param start
+     * @param end
+     * @return returns the length of minimal path from start state to end state.
+     */
     virtual double getLengthOfPath(State<T>* start, State<T>* end) {
         double counter = 0;
         State<T>* temp = end;
@@ -79,7 +92,13 @@ protected:
         }
         return counter;
     }
-
+    /**
+     * getDirection method computes the direction from source node
+     * to destination node of shortest path in graph.
+     * @param start source node
+     * @param end destination node.
+     * @return string described the directions from start node to end node.
+     */
     virtual string getDirection(State<T>* start, State<T>* end) {
         vector<string> directions;
         string result;
@@ -91,7 +110,7 @@ protected:
         }
         return getDirectionFromVector(directions);
     }
-
+    // todo: write documantation
     virtual int getDevelopStates(list<State<T>*> states) {
         int develops = 0;
         for (State<T>* state : states) {

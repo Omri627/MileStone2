@@ -114,6 +114,9 @@ void ThreadPool::waitForActivatedTasks() {
     while (isTaskActivated())
         sleep(checkIntervals);
 }
+/**
+ * print the amount of activated tasks.
+ */
 void ThreadPool::printActivatedTasks() {
     cout << "tasks: " << this->workers.size() << endl;
 }

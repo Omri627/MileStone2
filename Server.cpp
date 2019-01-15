@@ -1,5 +1,11 @@
 #include <string.h>
 #include "Server.h"
+/**
+ * createPortConnection method create connection to specific port
+ * and returns the file descriptor of this port connection.
+ * @param port port number
+ * @return returns file descriptor of port connection
+ */
 int Server::createPortConnection(int port) {
     struct sockaddr_in server_address;       // socket structure
     int socketFd;
@@ -30,11 +36,22 @@ int Server::createPortConnection(int port) {
     cout << "server opened listen for client request" << endl;
     return socketFd;
 }
+/**
+* static method which execute create port connection method of server object.
+* @param params parameters to send create port connection object.
+* @return return value of create port connection method.
+*/
 void* Server::createServerHelper(void * params) {
     create_params* parameters = (create_params*)params;
     *parameters->socketFd = parameters->server->createPortConnection(parameters->port);
     return nullptr;
 }
+/**
+ * readData method gets a client that connected to server,
+ * and reads the data given by this client.
+ * @param client client object.
+ * @return returns the data received by given client.
+ */
 string Server::readData(Client* client) {
     //pthread_mutex_lock(&global_mutex);
     const int bufferSize = 512;
@@ -54,7 +71,12 @@ string Server::readData(Client* client) {
     free(buffer);
     return data;
 }
-
+/**
+ * sendData method gets a message and client which connected to server
+ * the method send the client the given message.
+ * @param data data/message
+ * @param client specific client
+ */
 void Server::sendData(string data, Client* client) {
     int byteTransmitted;
     /* convert string data into array of characters to transmit */

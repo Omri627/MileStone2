@@ -12,9 +12,22 @@ ParallelServer::ParallelServer(unsigned long threads) {
     this->threadPool = new ThreadPool(threads);
     this->isRunning = true;
 }
+/**
+ * getFd method gets a port and returns
+ * the file descriptor of connection of this server to this port.
+ * @param port port
+ * @return returns the file descriptor of connection of this server to given port.
+ */
 int ParallelServer::getFd(int port) {
     return this->serverFd[port];
 }
+/**
+ * isConnectedPort method return a boolean variable indicate whether
+ * server open connection to given port
+ * @param port port
+ * @return returns true if server open connection to given port.
+ * at any other case returns false
+ */
 bool ParallelServer::isConnectedPort(int port) {
     map<int, int >::iterator iterator;
     iterator = this->serverFd.find(port);
@@ -22,7 +35,10 @@ bool ParallelServer::isConnectedPort(int port) {
         return true;
     return false;
 }
-
+/**
+ * openPortConnection method open a connection to a given port
+ * @param port port
+ */
 void ParallelServer::openPortConnection(int port) {
     ThreadPool::task task;
     /* create thread to create server with given port */
@@ -41,7 +57,12 @@ void ParallelServer::openPortConnection(int port) {
     this->serverFd[port] = *createParams.socketFd;
     free(createParams.socketFd);
 }
-
+/**
+ * listenToClient method listen to port wait for client connection.
+ * @param client client object
+ * @return returns indication whether a client connected to server successfully.
+ * or error occured
+ */
 int ParallelServer::listenToClient(Client* client) {
     struct sockaddr_in client_address;
     int connectionFd;
@@ -70,8 +91,13 @@ int ParallelServer::listenToClient(Client* client) {
         cout << "request rejected" << endl;
     }
 }
-
-
+/**
+ * open method open a connection in given port.
+ * when a client connect in this port to the server,
+ * interact with client and solve his input problems.
+ * @param port port of connection
+ * @param clientHandler aid the server to solve client problems.
+ */
 void ParallelServer::open(int port, ClientHandler *clientHandler) {
     ThreadPool::task listenTask, interactTask;
     listen_params listenParams, interactParams;
@@ -108,13 +134,20 @@ void ParallelServer::open(int port, ClientHandler *clientHandler) {
     /* keep listen to port */
     this->open(port, clientHandler);
 }
-
+/**
+ * stop server connection.
+ * close the connection of any linked client.
+ */
 void ParallelServer::stop() {
     this->isRunning = false;
     threadPool->waitForActivatedTasks();
     for (pair<int, int> portFd : this->serverFd)
         close(portFd.second);
 }
+/**
+ * close the connection between server and given client.
+ * @param client client object
+ */
 void ParallelServer::closeClientConnection(Client* client) {
     delete client;
     this->threadPool->taskFinish(pthread_self());
@@ -124,6 +157,12 @@ void* ParallelServer::listenToClientHelper(void *params) {
     listenParams->server->listenToClient(listenParams->client);
     return nullptr;
 }
+/**
+ * interactWithClient method gets a client
+ * interact with client, reads his requests
+ * and solve them using client handler object.
+ * @param client client object (contains client handler).
+ */
 void ParallelServer::interactWithClient(Client* client) {
     /* handle client request */
     try {
@@ -134,6 +173,10 @@ void ParallelServer::interactWithClient(Client* client) {
     /* close connection with client */
     this->closeClientConnection(client);
 }
+/**
+ * static method used to execute interact with client method.
+ * @param params parameters for interact with client method.
+ */
 void* ParallelServer::interactWithClientHelper(void *params) {
     listen_params* parameters = (listen_params*)params;
     parameters->server->interactWithClient(parameters->client);

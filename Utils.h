@@ -34,7 +34,11 @@ public:
      * at any other case returns false
      */
     static bool isNumber(string str);
-
+    /**
+     * count the number of commas in given string
+     * @param str specific string
+     * @return returns the amount of commas in given string.
+     */
     static int commansAmount(string str);
 
 };

@@ -20,14 +20,17 @@ public:
      */
     virtual void readSolution(std::istream& is) = 0;
     /**
+     * provide a format for textual representation of solution in file
+     * @return returns file representation of this solution.
+     */
+     virtual std::string fileRepresentation() const = 0;
+    /**
      * make solution streamable
      * and provide a format for read the object from a text stream
      * @param is input stream object
      * @param solution specific solution object
      * @return return input stream for chaining.
      */
-     virtual std::string fileRepresentation() const = 0;
-
     friend std::istream &operator>>(std::istream &is, Solution * solution) {
         solution->readSolution(is);
         return is;

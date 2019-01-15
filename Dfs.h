@@ -6,10 +6,21 @@
 template <class T>
 class Dfs : public Searcher<T> {
 private:
+    /**
+    * initialize: prep instructions required for the algorithm
+    * @param searchable searchable object
+    */
     void initialize(Searchable<T>* searchable) {
         searchable->getInitialState()->setCost(0);
         searchable->getInitialState()->setColor(GRAY);
     }
+    /**
+    * dfs algorithm gets a searchable object
+    * and find a path from initial state to goal state (if there any)
+    * the algorithm traverse the graph as follows:
+    * explores as far as possible along each branch before backtracking.
+    * @param searchable searchable object
+    */
     void dfsVisit(State<T>* state, Searchable<T>* searchable) {
         state->setColor(GRAY);
         //cout << "(" << state->getRow() << "," << state->getColumn() << ")" << endl;
@@ -24,9 +35,17 @@ private:
         state->setColor(BLACK);
     }
 public:
-    Dfs() {
-
-    }
+    /* empty constructor */
+    Dfs() {}
+    /**
+    * search method gets a searchable object and using the bfs algorithm
+    * it found the shortest path.
+    * and returns the a solution compose of
+    * cost, length of the shortest path, number of develop states.
+    * and the direction from intial state to goal state.
+    * @param searchable searchable object
+    * @return returns solution of specific searchable problem.
+    */
     virtual SearcherSolution* search(Searchable<T>* searchable) {
         int cost, sum;                  // cost and sum of path
         initialize(searchable);

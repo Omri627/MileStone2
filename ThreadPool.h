@@ -101,7 +101,9 @@ public:
      * wait for activated tasks in application and resume after their termination
      */
     void waitForActivatedTasks();
-
+    /**
+     * print the amount of activated tasks.
+     */
     void printActivatedTasks();
 };
 

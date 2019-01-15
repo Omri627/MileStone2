@@ -46,6 +46,11 @@ bool Utils::isNumber(string str) {
             return false;
     return true;
 }
+/**
+ * count the number of commas in given string
+ * @param str specific string
+ * @return returns the amount of commas in given string.
+ */
 int Utils::commansAmount(string str) {
     int commas = 0;
     for (int i = 0; i < str.length(); i++) {

@@ -15,18 +15,38 @@
 template <class T>
 class MyTestClientHandler : public ClientHandler {
 private:
+    /* searcher algorithm  */
     SearcherSolver<T>* solver;
+    /* file managing storing the solutions of to problems that appeared before */
     FileCacheManager<MazeGame<T>*, SearcherSolution*> *cache;
 public:
+    /**
+     * construct handler object with given solver and cache object
+     * @param solver searcher algorithm
+     * @param cache file managing storing the solutions of to problems that appeared before
+     */
     MyTestClientHandler(SearcherSolver<T> *solver, FileCacheManager<MazeGame<T>*, SearcherSolution*> *cache) {
         this->solver = solver;
         this->cache = cache;
     }
-
+    /**
+     * construct handler object with given solver
+     * @param solver searcher algorithm.
+     */
     MyTestClientHandler(SearcherSolver<T> *solver) {
         this->solver = solver;
         this->cache = new FileCacheManager<MazeGame<T>*, SearcherSolution* >("cache.txt");
     }
+    /**
+     * handleClient method gets a server and client.
+     * and aid the server to handle client request.
+     * for any searchable problems, this method processed the data regarding the problem
+     * and produce a solution.
+     * @param server server object
+     * @param client client object
+     * @return returns 1 if the this method handle client requests successfully
+     * returns 0 if error occured.
+     */
     virtual int handleClient(Server *server, Client* client) {
         const int commasInPoint = 1;        // number of commas allowed in initial and goal state input
         int elementsInRow;                  // number of elements in row
@@ -54,7 +74,9 @@ public:
         server->sendData(solution->StringRepresentation(), client);
         return 1;
     }
-
+    /**
+     * desructor, used to free memory.
+     */
     virtual ~MyTestClientHandler() {
         if (this->cache != nullptr)
             delete this->cache;
