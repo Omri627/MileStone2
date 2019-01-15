@@ -58,7 +58,6 @@ string Server::readData(Client* client) {
     int bytesReaded;
     char * buffer = (char*)calloc(bufferSize,1);
     bzero(buffer,bufferSize);                      // set buffer with null values
-    //todo: flush
     cout << "";
     bytesReaded = read(client->getConnectionFd(), buffer, bufferSize);
     if (bytesReaded < 0) {
@@ -93,7 +92,6 @@ void Server::sendData(string data, Client* client) {
         perror("ERROR writing to socket");
         exit(1);
     }
-    cout <<msgToTransmit << endl;
     free(msgToTransmit);
 }
 /**

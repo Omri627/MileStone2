@@ -15,7 +15,6 @@ private:
     map<Problem, Solution, CmpMazeGame<Problem> > solutions;
     /* url of file that store the data */
     string fileUrl;
-    //todo: change file name
     /**
      * getStartIterator method returns iterator for the begin.
      * @return returns iterator for the begin.

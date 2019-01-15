@@ -80,6 +80,11 @@ public:
     virtual ~MyTestClientHandler() {
         if (this->cache != nullptr)
             delete this->cache;
+        if (this->solver != nullptr) {
+            delete solver->getSearcher();
+            delete this->solver;
+        }
+
     }
 
 };

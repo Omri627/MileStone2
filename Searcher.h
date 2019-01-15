@@ -18,7 +18,12 @@ using namespace std;
 template <class T>
 class Searcher {
 private:
-    //todo: write documantation
+    /**
+     * check the direction of the path that need to take in oreder to reach from previus to curr
+     * @param prev previus state
+     * @param curr current state
+     * @return strin direction
+     */
     string checkDirection(State<T>* prev, State<T>* curr) {
         string dir;
         if (curr->getRow() < prev->getRow()) {
@@ -32,7 +37,11 @@ private:
         }
         return dir;
     }
-    // todo : write documantation
+    /**
+     * make the direction with commas that seprete them
+     * @param vec vector of direction
+     * @return string with all the directions
+     */
     string getDirectionFromVector(vector<string> vec) {
         string res;
         for (std::vector<string>::iterator it = vec.begin(); it != vec.end(); ++it ) {
@@ -110,7 +119,11 @@ protected:
         }
         return getDirectionFromVector(directions);
     }
-    // todo: write documantation
+   /**
+    * count all develop state, meanninig all the grays and blacks states
+    * @param states the states to be cehcked
+    * @return number of develop states
+    */
     virtual int getDevelopStates(list<State<T>*> states) {
         int develops = 0;
         for (State<T>* state : states) {

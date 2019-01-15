@@ -12,14 +12,18 @@ using namespace std;
 
 template <class T>
 class BestFirstSearch : public Searcher<T> {
-private:
-    StatePriorityQueue<State<T>*> priorityQueue;
 
 public:
+    /**
+     * return best path on graph with Best First Search algorithm
+     * @param searchable
+     * @return SearcherSolution
+     */
     virtual SearcherSolution *search(Searchable<T> *searchable) {
+        StatePriorityQueue<State<T>*> priorityQueue;
         double newPath = 0;
         double oldPath = -1;
-        priorityQueue.emplace(searchable->getInitialState());
+        priorityQueue.push(searchable->getInitialState());
         searchable->getInitialState()->setColor(BLACK); //initial state should be black
 
         while (!priorityQueue.empty()) {
@@ -27,6 +31,7 @@ public:
             priorityQueue.remove(n);
             n->setColor(BLACK);             //color is black so we won't check n again
             if (n == searchable->getGoalState()) {
+                //update result
                 double sum = this->getCostOfPath(searchable->getInitialState(), n);
                 double length = this->getLengthOfPath(searchable->getInitialState(), n);
                 int develops = this->getDevelopStates(searchable->getAllStates());
@@ -45,28 +50,34 @@ public:
                         s->setColor(GRAY); //color is gray because we add it to queue
                         // update the sum of the path from the start to s
                         s->setCost(this->getCostOfPath(searchable->getInitialState(), s));
-                        removeAndEmplace(s);
+                        removeAndEmplace(s, &priorityQueue);
                     } else {
                         if (s->getCost() < oldPath || oldPath == -1) { //old path will be -1 only at the beginning
                             if (s->getColor() != GRAY) {
                                 //if s is not in pq add to pq
-                                removeAndEmplace(s);
+                                removeAndEmplace(s, &priorityQueue);
                                 oldPath = s->getCost();
                             } else {
-                                removeAndEmplace(s);
+                                removeAndEmplace(s,&priorityQueue);
                             }
                         }
                     }
                 }
             }
         }
+        //no path found
         return new SearcherSolution(-1, -1);
     }
 
 private:
-    void removeAndEmplace(State<T>* s) {
-        priorityQueue.remove(s);
-        priorityQueue.emplace(s);
+    /**
+     * remove amd emplace states from the queue
+     * @param pair of state and double
+     * @param pq priority queue
+     */
+    void removeAndEmplace(State<T>* s, StatePriorityQueue<State<T>*>* priorityQueue) {
+        priorityQueue->remove(s);
+        priorityQueue->push(s);
     }
 };
 
